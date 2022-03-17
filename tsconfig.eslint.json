@@ -1,0 +1,13 @@
+{
+    "extends": "./tsconfig.json",
+    "include": [
+        ".eslintrc.js",
+        "postcss.config.js",
+        "jest.config.ts",
+        "commitlint.config.js",
+        "craco.config.js",
+        "src",
+        "tests",
+        "typings"
+    ]
+}
