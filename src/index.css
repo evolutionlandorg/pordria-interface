@@ -24,7 +24,8 @@ a {
 
 h1,
 h2,
-h3 {
+h3,
+h4 {
   margin: 0;
 }
 
@@ -32,4 +33,5 @@ button {
   outline: none;
   border: none;
   cursor: pointer;
+  background-color: transparent;
 }
