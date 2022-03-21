@@ -1,23 +1,41 @@
-import React, { StrictMode } from 'react'
+import React, { StrictMode, Suspense } from 'react'
 import ReactDOM from 'react-dom'
 import { Routes, Route, BrowserRouter, Navigate } from 'react-router-dom'
 
 import '@/index.css'
 import Layout from '@/pages/Layout'
 import Home from '@/pages/Home'
-import { INDEX, NO_MATCH } from '@/config/routers'
+import { PROJECT_DETAIL, INDEX, NO_MATCH } from '@/config/routers'
 import reportWebVitals from '@/reportWebVitals'
+import Loading from '@/components/Loading'
+import Provider from '@/Provider'
+
+import main from '@/utils/ethers'
+
+main()
+
+const EventList = React.lazy(() => import('@/pages/ProjectDetail'))
 
 ReactDOM.render(
   <StrictMode>
-    <BrowserRouter>
-      <Routes>
-        <Route path={INDEX} element={<Layout />}>
-          <Route index element={<Home />} />
-          <Route path={NO_MATCH} element={<Navigate to={INDEX} replace />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+    <Provider>
+      <BrowserRouter>
+        <Routes>
+          <Route path={INDEX} element={<Layout />}>
+            <Route index element={<Home />} />
+            <Route
+              path={PROJECT_DETAIL}
+              element={
+                <Suspense fallback={<Loading />}>
+                  <EventList />
+                </Suspense>
+              }
+            />
+            <Route path={NO_MATCH} element={<Navigate to={INDEX} replace />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </Provider>
   </StrictMode>,
   document.getElementById('root')
 )
