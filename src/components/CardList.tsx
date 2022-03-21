@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import Card from '@/components/Card'
-import { INDEX } from '@/config/routers'
+import { EVENT_LIST } from '@/config/routers'
 
 const IntroContainer = styled.section`
   padding: 5rem 0 6rem 0;
@@ -34,7 +34,7 @@ function CardList() {
       {new Array(10).fill(1).map((v, i) => (
         // TODO: waiting for discussed result next week
         // eslint-disable-next-line react/no-array-index-key
-        <Card key={i} to={INDEX} />
+        <Card key={i} to={EVENT_LIST} />
       ))}
     </IntroContainer>
   )
