@@ -8,7 +8,7 @@ const StyledHeader = styled.header`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 100vw;
+  width: 100%;
   box-sizing: border-box;
   padding: 1rem;
   position: sticky;
@@ -17,7 +17,6 @@ const StyledHeader = styled.header`
   z-index: 999;
   background-color: rgba(255, 255, 255, 0.01);
   border-bottom: 0.75px solid rgba(19, 19, 19, 0.13);
-  backdrop-filter: blur(2px);
 
   a {
     color: #0f0f0f;
