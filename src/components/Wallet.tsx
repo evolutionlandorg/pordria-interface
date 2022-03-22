@@ -4,21 +4,8 @@ import { changeChain, getConfig, useConnectWallet } from '@/utils/web3React'
 import { useWeb3React } from '@web3-react/core'
 import React from 'react'
 import styled from 'styled-components'
+import Button from '@/components/Button'
 
-const StyledButton = styled.button`
-  font-size: 1rem;
-  height: fit-content;
-  text-align: center;
-  padding: 0;
-  border: 0.5px solid #838383;
-  padding: 8px;
-  border-radius: 8px;
-
-  :hover {
-    border-color: #333;
-    background-color: rgba(51, 51, 51, 0.1);
-  }
-`
 const Account = styled.div`
   display: inline-flex;
   width: fit-content;
@@ -42,18 +29,14 @@ function Wallet() {
 
   if (!active) {
     return (
-      <StyledButton type="button" onClick={() => connectWallet(injected)}>
-        connect wallet
-      </StyledButton>
+      <Button onClick={() => connectWallet(injected)}>connect wallet</Button>
     )
   }
 
   return (
     <Account>
       <span>{accountEllipsis}</span>
-      <StyledButton type="button" onClick={deactivate}>
-        logout
-      </StyledButton>
+      <Button onClick={deactivate}>logout</Button>
     </Account>
   )
 }
