@@ -24,6 +24,7 @@ const Title = styled.h1`
   letter-spacing: 0.002em;
   color: #1f1f1f;
   margin: 0;
+  max-width: 28.125rem;
 
   @media screen and (max-width: 960px) {
     font-size: 2.1875rem;
@@ -33,6 +34,7 @@ const Title = styled.h1`
 const Description = styled.span`
   font-size: 1.25rem;
   line-height: 150%;
+  max-width: 25rem;
 `
 
 function Intro() {
