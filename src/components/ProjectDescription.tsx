@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { FC } from 'react'
 import styled, { css } from 'styled-components'
-import logo from '@/logo.png'
+import { getUrl, IEventList } from '@/hooks/useFetchEventList'
 
 const StyledInfo = styled.section`
   display: grid;
@@ -35,38 +35,47 @@ const StyledInfo = styled.section`
   }
 `
 
-const description = css`
+const descriptionCSS = css`
   font-size: 1rem;
   max-width: 260px;
 `
 
 const Description = styled.h4`
-  ${description}
+  ${descriptionCSS}
   margin: 1.25rem 0 0.25rem;
 `
 
 const Link = styled.a`
-  ${description}
+  ${descriptionCSS}
   color: #2172e5;
 `
 
-function ProjectDescription() {
+interface IProjectDescriptionProps {
+  id: string
+  description?: IEventList | null
+}
+
+const ProjectDescription: FC<IProjectDescriptionProps> = ({
+  description,
+  id
+}) => {
+  const { logoURI, name } = description || {}
   return (
     <StyledInfo>
-      <img src={logo} alt="Evolution" />
+      <img src={logoURI} alt="Evolution" />
       <div>
-        <Description>Evolution Land</Description>
+        <Description>{name}</Description>
         <Description>Website:</Description>
-        <Link
-          target="_blank"
-          href="https://www.evolution.land"
-          rel="noreferrer"
-        >
-          www.evolution.land
+        <Link target="_blank" href={getUrl(id || '')} rel="noreferrer">
+          {id}
         </Link>
       </div>
     </StyledInfo>
   )
+}
+
+ProjectDescription.defaultProps = {
+  description: undefined
 }
 
 export default ProjectDescription
