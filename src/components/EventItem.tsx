@@ -1,4 +1,5 @@
-import React from 'react'
+import { IEventItem } from '@/hooks/useFetchEventList'
+import React, { FC } from 'react'
 import styled from 'styled-components'
 
 const StyledItem = styled.div`
@@ -39,13 +40,18 @@ const StyledButton = styled.button`
   }
 `
 
-function EventItem() {
+interface IEventItemProps {
+  item: IEventItem
+}
+
+const EventItem: FC<IEventItemProps> = ({ item }) => {
+  const { name, detail } = item
   return (
     <StyledItem>
-      <span>Event 1</span>
-      <span>2022/03/16</span>
-      <span>2022/03/16</span>
-      <span>www.medium.com/eeeeee</span>
+      <span>{name}</span>
+      <span>-</span>
+      <span>-</span>
+      <span>{detail}</span>
       <Opts>
         <StyledButton type="button">Claim</StyledButton>
         <StyledButton type="button">List</StyledButton>
