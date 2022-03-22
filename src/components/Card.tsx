@@ -1,10 +1,13 @@
 import React, { FC } from 'react'
 import { Link, LinkProps } from 'react-router-dom'
 import styled from 'styled-components'
-import logo from '@/logo.png'
 import { ArrowRightIcon } from '@primer/octicons-react'
+import { IRenderItem } from '@/hooks/useFetchEventList'
 
-interface CardProps extends LinkProps {}
+interface CardProps extends LinkProps {
+  item: IRenderItem
+  id: string
+}
 
 const HoverCard = styled(Link)`
   box-sizing: border-box;
@@ -49,14 +52,18 @@ const Details = styled.span`
   width: 100%;
 `
 
-const Card: FC<CardProps> = ({ to }) => (
-  <HoverCard to={to}>
-    <CardLogo src={logo} alt="Evolution Land" />
-    <CardTitle>Evolution Land</CardTitle>
-    <Details>
-      Details <ArrowRightIcon />
-    </Details>
-  </HoverCard>
-)
+const Card: FC<CardProps> = ({ to, item, id }) => {
+  const { list } = item
+  const { logoURI, name } = list || {}
+  return (
+    <HoverCard to={`${to}?url=${id}`}>
+      <CardLogo src={logoURI} alt={name} />
+      <CardTitle>{name}</CardTitle>
+      <Details>
+        Details <ArrowRightIcon />
+      </Details>
+    </HoverCard>
+  )
+}
 
 export default Card
