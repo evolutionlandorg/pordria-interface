@@ -27,7 +27,8 @@ module.exports = {
         ],
         unnamedComponents: ['function-expression', 'arrow-function']
       }
-    ]
+    ],
+    'no-restricted-syntax': ['off', 'ForOfStatement']
   },
   overrides: [
     {
