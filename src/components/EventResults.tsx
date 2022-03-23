@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useMemo, useState } from 'react'
+import React, { FC, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import Search from '@/components/Search'
 import Wallet from '@/components/Wallet'
@@ -49,19 +49,16 @@ const EventResults: FC<IEventResultsProps> = ({ list = [] }) => {
     return index
   }, [list])
 
-  const renderEvents = useCallback(
-    () =>
-      list
-        .map(item => {
-          const { root } = item
-          if (roots.length <= 0 || roots.includes(root)) {
-            return <EventItem key={root} item={item} user={user} />
-          }
-          return null
-        })
-        .filter(Boolean),
-    [list, roots, user]
-  )
+  const renderEvents = () =>
+    list
+      .map(item => {
+        const { root } = item
+        if (roots.length <= 0 || roots.includes(root)) {
+          return <EventItem key={root} item={item} user={user} />
+        }
+        return null
+      })
+      .filter(Boolean)
 
   const search = () => {
     const searchResult = indexSearch.search(user).map(item => item.toString())
