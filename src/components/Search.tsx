@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { ChangeEventHandler, FC, MouseEventHandler } from 'react'
 import { SearchIcon } from '@primer/octicons-react'
 import styled from 'styled-components'
 
@@ -37,15 +37,22 @@ const StyledButton = styled.button`
   }
 `
 
-function Search() {
-  return (
-    <StyledSearch>
-      <StyledInput type="search" placeholder="Search by address" />
-      <StyledButton type="button">
-        <SearchIcon />
-      </StyledButton>
-    </StyledSearch>
-  )
+interface ISearchProps {
+  onSearch: MouseEventHandler<HTMLButtonElement>
+  onChange: ChangeEventHandler<HTMLInputElement>
 }
+
+const Search: FC<ISearchProps> = ({ onChange, onSearch }) => (
+  <StyledSearch>
+    <StyledInput
+      type="search"
+      placeholder="Search by address"
+      onChange={onChange}
+    />
+    <StyledButton type="button" onClick={onSearch}>
+      <SearchIcon />
+    </StyledButton>
+  </StyledSearch>
+)
 
 export default Search
