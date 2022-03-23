@@ -18,7 +18,7 @@ export function getLibrary(provider: Provider) {
 }
 
 export function getConfig(chainName: ChainEnum) {
-  const { chainId, rpcUrls } = blockChainConfig.chainMap[chainName]
+  const { chainId, rpcUrls } = blockChainConfig[chainName]
 
   const chainIdNum = Number.parseInt(chainId, 16)
 
@@ -39,7 +39,7 @@ export function getConfig(chainName: ChainEnum) {
 
 export const changeChain = async (chainName: ChainEnum) => {
   const { ethereum } = window
-  const chainConfig = blockChainConfig.chainMap[chainName]
+  const chainConfig = blockChainConfig[chainName]
   if (ethereum && ethereum.isMetaMask && chainConfig) {
     await ethereum.request({
       method: 'wallet_addEthereumChain',
@@ -77,7 +77,7 @@ export const useConnectWallet = (onChange?: Function) => {
             }
             break
           default:
-            console.log(error)
+            break
         }
       }
     },

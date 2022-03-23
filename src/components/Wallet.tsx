@@ -1,6 +1,6 @@
 import { ChainEnum } from '@/config/block-chain/common'
 import { wait } from '@/utils/misc'
-import { changeChain, getConfig, useConnectWallet } from '@/utils/web3React'
+import { changeChain, getConfig, useConnectWallet } from '@/utils/web3-react'
 import { useWeb3React } from '@web3-react/core'
 import React from 'react'
 import styled from 'styled-components'
@@ -23,6 +23,7 @@ function Wallet() {
   const { account, active, deactivate } = useWeb3React()
   const { connectWallet } = useConnectWallet(() => onChange(ChainEnum.MUMBAI))
   const { injected } = getConfig(ChainEnum.MUMBAI)
+
   const accountEllipsis = account
     ? `${account.substring(0, 6)}...${account.substring(account.length - 4)}`
     : null
