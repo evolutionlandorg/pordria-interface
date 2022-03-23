@@ -109,7 +109,6 @@ function CardList() {
     const r: JSX.Element[] = []
     Object.keys(list).forEach(k => {
       const { loading, error } = list[k]
-      console.warn(list[k])
       if (!loading && !error) {
         r.push(<Card key={k} to={PROJECT_DETAIL} id={k} item={list[k]} />)
       }

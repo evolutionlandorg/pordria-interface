@@ -1,7 +1,5 @@
-import { ContractInterface } from 'ethers'
-
 export enum ChainEnum {
-  MUMBAI = 'Mumbai Testnet'
+  MUMBAI = 80001
 }
 
 export interface IChain {
@@ -17,17 +15,6 @@ export interface IChain {
   rpcUrls: string[]
 }
 
-type IChainMap = {
-  [key: string]: IChain
-}
-
-interface IContract {
-  address: string
-  chain: ChainEnum
-  ABI: ContractInterface
-}
-
 export interface IBlockChain {
-  contracts: IContract[]
-  chainMap: IChainMap
+  [key: string]: IChain
 }

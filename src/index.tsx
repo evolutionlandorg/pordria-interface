@@ -10,10 +10,6 @@ import reportWebVitals from '@/reportWebVitals'
 import Loading from '@/components/Loading'
 import Provider from '@/Provider'
 
-import main from '@/utils/ethers'
-
-main()
-
 const EventList = React.lazy(() => import('@/pages/ProjectDetail'))
 
 ReactDOM.render(
