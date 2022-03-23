@@ -23,7 +23,7 @@ const StyledList = styled.main`
 function ProjectDetail() {
   const location = useLocation()
   const [projectsID, setProjectsID] = useState<string[]>([])
-  const res = useFetchEventList(projectsID)
+  const res = useFetchEventList(projectsID, true)
 
   useEffect(() => {
     const search = location.search

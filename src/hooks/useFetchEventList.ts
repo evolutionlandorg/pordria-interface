@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import useFetch from '@/hooks/useFetch'
+import { createDataArrayClaim, getRoot } from '@/utils/merkle-tree'
 
 export interface IEventItem {
   chainId: number
@@ -8,6 +9,8 @@ export interface IEventItem {
   detail: string
   logoURI: string
   proofURI: string
+  claims: IClaim[]
+  root: string
 }
 
 export interface IEventList {
@@ -39,25 +42,48 @@ export function getUrl(listID: string): string {
   return ''
 }
 
-const useFetchEventList = (projectsID: string[]) => {
+const useFetchEventList = (projectsID: string[], includeClaims?: boolean) => {
   const { fetchData } = useFetch()
   const [renderList, setRenderList] = useState<IRenderList>({})
 
   const fetchEventList = useCallback(async () => {
     if (projectsID && projectsID.length > 0) {
       projectsID.forEach(projectID => {
-        fetchData<IEventList>(getUrl(projectID)).then(eventList => {
-          setRenderList(list => ({
-            ...list,
-            [projectID]: {
-              list: eventList || null,
-              error: eventList === undefined
+        fetchData<IEventList>(getUrl(projectID))
+          .then(async eventList => {
+            if (includeClaims && eventList) {
+              const { events } = eventList
+
+              const fetchs = []
+
+              for (const event of events) {
+                fetchs.push(fetchData<IClaim[]>(event.proofURI))
+              }
+
+              const results = await Promise.allSettled(fetchs)
+              results.forEach((settled, i) => {
+                if (settled.status === 'fulfilled' && settled.value) {
+                  const claims = settled.value
+                  events[i].root = getRoot(createDataArrayClaim(claims)).hash
+                  events[i].claims = claims
+                }
+              })
             }
-          }))
-        })
+
+            return eventList
+          })
+          .then(eventList => {
+            setRenderList(list => ({
+              ...list,
+              [projectID]: {
+                list: eventList || null,
+                error: eventList === undefined
+              }
+            }))
+          })
       })
     }
-  }, [projectsID, fetchData])
+  }, [projectsID, fetchData, includeClaims])
 
   useEffect(() => {
     fetchEventList()
@@ -73,7 +99,7 @@ const useFetchEventList = (projectsID: string[]) => {
         error
       }
     })
-    // setRenderList(result)
+
     return result
   }, [projectsID, renderList])
 }
