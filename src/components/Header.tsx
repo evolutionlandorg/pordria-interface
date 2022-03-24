@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 import { CONTACT_US, GITHUB_INDEX, INDEX } from '@/config/routers'
-import { MarkGithubIcon } from '@primer/octicons-react'
+import { MarkGithubIcon, PaperAirplaneIcon } from '@primer/octicons-react'
 
 const StyledHeader = styled.header`
   display: flex;
@@ -23,8 +23,14 @@ const StyledHeader = styled.header`
   }
 `
 const Title = styled.h2`
+  display: flex;
+  align-items: center;
   font-size: 1.25rem;
 `
+const StyledPaperAirplaneIcon = styled(PaperAirplaneIcon)`
+  margin-right: 0.625rem;
+`
+
 const Nav = styled.nav`
   display: inline-flex;
   align-items: center;
@@ -55,7 +61,9 @@ function Header() {
   return (
     <StyledHeader>
       <Link to={INDEX}>
-        <Title>Pordria</Title>
+        <Title>
+          <StyledPaperAirplaneIcon /> Pordria
+        </Title>
       </Link>
       <Nav>
         <a href={CONTACT_US} rel="noreferrer">

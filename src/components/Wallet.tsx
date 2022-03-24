@@ -1,8 +1,7 @@
 import { ChainEnum } from '@/config/block-chain/common'
 import { wait } from '@/utils/misc'
 import { changeChain, getConfig, useConnectWallet } from '@/utils/web3-react'
-import { useWeb3React } from '@web3-react/core'
-import React from 'react'
+import React, { useMemo } from 'react'
 import styled from 'styled-components'
 import Button from '@/components/Button'
 
@@ -20,8 +19,10 @@ function Wallet() {
     await wait(500)
     await changeChain(chainName)
   }
-  const { account, active, deactivate } = useWeb3React()
-  const { connectWallet } = useConnectWallet(() => onChange(ChainEnum.MUMBAI))
+  const { connectWallet, deactivate, account } = useConnectWallet(() =>
+    onChange(ChainEnum.MUMBAI)
+  )
+  const active = useMemo(() => !!account, [account])
   const { injected } = getConfig(ChainEnum.MUMBAI)
 
   const accountEllipsis = account
