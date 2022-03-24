@@ -1,10 +1,10 @@
 import React, { FC, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import Search from '@/components/Search'
-import Wallet from '@/components/Wallet'
 import { IEventItem } from '@/hooks/useFetchEventList'
-import EventItem from '@/components/EventItem'
 import { Index } from 'flexsearch'
+import EventItem from './EventItem'
+import Wallet from './Wallet'
 
 const OptBar = styled.div`
   display: grid;
@@ -33,9 +33,10 @@ const Opt = styled.p`
 `
 interface IEventResultsProps {
   list?: IEventItem[]
+  chainID?: number
 }
 
-const EventResults: FC<IEventResultsProps> = ({ list = [] }) => {
+const EventResults: FC<IEventResultsProps> = ({ list = [], chainID }) => {
   const [roots, setRoots] = useState<string[]>([])
   const [user, setUser] = useState('')
   const indexSearch = useMemo(() => {
@@ -69,7 +70,7 @@ const EventResults: FC<IEventResultsProps> = ({ list = [] }) => {
     <StyledResults>
       <OptBar>
         <Search onSearch={search} onChange={e => setUser(e.target.value)} />
-        <Wallet />
+        <Wallet chainID={chainID} />
       </OptBar>
       <ListTitle>
         <p>Event ID</p>
@@ -84,7 +85,8 @@ const EventResults: FC<IEventResultsProps> = ({ list = [] }) => {
 }
 
 EventResults.defaultProps = {
-  list: undefined
+  list: undefined,
+  chainID: undefined
 }
 
 export default EventResults

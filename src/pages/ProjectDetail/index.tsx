@@ -1,9 +1,9 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import ProjectDescription from '@/components/ProjectDescription'
 import styled from 'styled-components'
-import EventResults from '@/components/EventResults'
 import useFetchEventList from '@/hooks/useFetchEventList'
 import { useLocation } from 'react-router-dom'
+import ProjectDescription from './ProjectDescription'
+import EventResults from './EventResults'
 
 const StyledList = styled.main`
   display: grid;
@@ -39,14 +39,17 @@ function ProjectDetail() {
     setProjectsID([search.url])
   }, [location])
 
-  const renderRes = useMemo(() => {
+  const { description, chainID, result } = useMemo(() => {
     if (projectsID.length > 0) {
-      const { list } = res[projectsID[0]]
+      const { projectDetail: list } = res[projectsID[0]]
       const { events } = list || {}
 
-      return { description: list, result: events }
+      return {
+        description: list,
+        result: events,
+        chainID: events && events[0].chainId
+      }
     }
-
     return {}
   }, [res, projectsID])
 
@@ -54,9 +57,10 @@ function ProjectDetail() {
     <StyledList>
       <ProjectDescription
         id={projectsID[0]}
-        description={renderRes.description}
+        description={description}
+        chainID={chainID}
       />
-      <EventResults list={renderRes.result} />
+      <EventResults list={result} chainID={chainID} />
     </StyledList>
   )
 }

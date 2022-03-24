@@ -1,11 +1,10 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import Card from '@/components/Card'
 import { PROJECT_DETAIL } from '@/config/routers'
-import { LocalKeys } from '@/config/db'
-import useFetch from '@/hooks/useFetch'
 import useFetchEventList from '@/hooks/useFetchEventList'
-import Button from './Button'
+import Button from '@/components/Button'
+import useProjects from '@/hooks/useProjects'
+import Card from './Card'
 
 const CardWrapper = styled.div`
   padding: 5rem 0 6rem 0;
@@ -62,59 +61,41 @@ const ListAddress = styled.input`
   font-size: 1rem;
 `
 
-interface IProjects {
-  [key: string]: {
-    name: string
-    homepage: string
-  }
-}
-
 function CardList() {
   const [url, setUrl] = useState('')
-  const [projectsID, setProjectsID] = useState<string[]>([])
-  const [cacheProjects, setCacheProjects] = useState<IProjects>(() => {
-    const cache = localStorage.getItem(LocalKeys.AIRDROP_PROJECTS) || ''
-    let res
-    try {
-      res = JSON.parse(cache)
-      setProjectsID(Object.keys(res))
-    } catch (error) {
-      res = {}
-    }
+  const { projectIDPartialList, addProjects, projects } = useProjects()
 
-    return res
-  })
-  const { fetchData } = useFetch()
-  const list = useFetchEventList(projectsID)
-
-  const updateCacheProjects = async () => {
-    const newProjects = await fetchData<IProjects>(url)
-    if (newProjects) {
-      setProjectsID(Object.keys(newProjects))
-    }
-    const updateProjects = {
-      ...cacheProjects,
-      ...newProjects
-    }
-
-    localStorage.setItem(
-      LocalKeys.AIRDROP_PROJECTS,
-      JSON.stringify(updateProjects)
-    )
-
-    setCacheProjects(updateProjects)
-  }
+  const projectDetailList = useFetchEventList(projectIDPartialList)
 
   const getRender = (): JSX.Element[] => {
     const r: JSX.Element[] = []
-    Object.keys(list).forEach(k => {
-      const { loading, error } = list[k]
+    Object.keys(projectDetailList).forEach(k => {
+      const { loading, error, projectDetail } = projectDetailList[k]
+      const { name } = projects[k]
       if (!loading && !error) {
-        r.push(<Card key={k} to={PROJECT_DETAIL} id={k} item={list[k]} />)
+        r.push(
+          <Card
+            key={k}
+            to={PROJECT_DETAIL}
+            id={k}
+            item={{
+              projectDetail: projectDetail || {
+                name
+              },
+              loading,
+              error
+            }}
+          />
+        )
       }
     })
 
     return r
+  }
+
+  const addProjectsHandler = () => {
+    setUrl('')
+    addProjects(url)
   }
 
   return (
@@ -125,8 +106,9 @@ function CardList() {
           placeholder="Address"
           type="text"
           onChange={e => setUrl(e.target.value)}
+          value={url}
         />
-        <Button onClick={updateCacheProjects}>+ add a list</Button>
+        <Button onClick={addProjectsHandler}>+ add a list</Button>
       </AddList>
     </StyledAllLists>
   )

@@ -1,7 +1,7 @@
-import CardList from '@/components/CardList'
-import Intro from '@/components/Intro'
 import React from 'react'
 import styled from 'styled-components'
+import CardList from './CardList'
+import Intro from './Intro'
 
 const Main = styled.main`
   display: grid;

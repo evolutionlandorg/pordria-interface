@@ -4,7 +4,7 @@ import blockChainConfig from '@/config/block-chain'
 import { InjectedConnector } from '@web3-react/injected-connector'
 import { WalletConnectConnector } from '@web3-react/walletconnect-connector'
 import { UnsupportedChainIdError, useWeb3React } from '@web3-react/core'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback } from 'react'
 import { AbstractConnector } from '@web3-react/abstract-connector'
 import { wait } from './misc'
 
@@ -55,7 +55,6 @@ export const changeChain = async (chainName: ChainEnum) => {
 
 export const useConnectWallet = (onChange?: Function) => {
   const { activate, deactivate, account } = useWeb3React()
-  const [address, setAddress] = useState('')
 
   const connectWallet = useCallback(
     async (connector: AbstractConnector) => {
@@ -86,25 +85,9 @@ export const useConnectWallet = (onChange?: Function) => {
     [activate, deactivate, onChange]
   )
 
-  useEffect(() => {
-    const getWalletStatus = async () => {
-      const { ethereum } = window
-      let selectedAddress = account
-      if (ethereum && !selectedAddress) {
-        ;[selectedAddress] = await ethereum.request({
-          method: 'eth_accounts'
-        })
-      }
-
-      setAddress(selectedAddress || '')
-    }
-
-    getWalletStatus()
-  }, [account])
-
   return {
     connectWallet,
     deactivate,
-    account: address
+    account
   }
 }
