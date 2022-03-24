@@ -1,6 +1,8 @@
-import React, { FC } from 'react'
+import React, { FC, useMemo } from 'react'
 import styled, { css } from 'styled-components'
-import { getUrl, IEventList } from '@/hooks/useFetchEventList'
+import { getUrl, IProjectDetail } from '@/hooks/useFetchEventList'
+import useProjects from '@/hooks/useProjects'
+import blockChainConfig from '@/config/block-chain'
 
 const StyledInfo = styled.section`
   display: grid;
@@ -45,6 +47,11 @@ const Description = styled.h4`
   margin: 1.25rem 0 0.25rem;
 `
 
+const DesContent = styled.span`
+  ${descriptionCSS}
+  color: #333;
+`
+
 const Link = styled.a`
   ${descriptionCSS}
   color: #2172e5;
@@ -52,19 +59,31 @@ const Link = styled.a`
 
 interface IProjectDescriptionProps {
   id: string
-  description?: IEventList | null
+  description?: IProjectDetail | null
+  chainID?: number
 }
 
 const ProjectDescription: FC<IProjectDescriptionProps> = ({
   description,
-  id
+  id,
+  chainID
 }) => {
-  const { logoURI, name } = description || {}
+  const { projects } = useProjects()
+  const chainName = useMemo(() => {
+    if (chainID) {
+      return blockChainConfig[chainID].chainName
+    }
+
+    return ''
+  }, [chainID])
+  const { logoURI, name = id && projects[id].name } = description || {}
   return (
     <StyledInfo>
       <img src={logoURI} alt="Evolution" />
       <div>
         <Description>{name}</Description>
+        <Description>Network:</Description>
+        <DesContent>{chainName}</DesContent>
         <Description>Website:</Description>
         <Link target="_blank" href={getUrl(id || '')} rel="noreferrer">
           {id}
@@ -75,7 +94,8 @@ const ProjectDescription: FC<IProjectDescriptionProps> = ({
 }
 
 ProjectDescription.defaultProps = {
-  description: undefined
+  description: undefined,
+  chainID: undefined
 }
 
 export default ProjectDescription

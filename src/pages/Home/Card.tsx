@@ -53,8 +53,8 @@ const Details = styled.span`
 `
 
 const Card: FC<CardProps> = ({ to, item, id }) => {
-  const { list } = item
-  const { logoURI, name } = list || {}
+  const { projectDetail } = item
+  const { logoURI, name } = projectDetail || {}
   return (
     <HoverCard to={`${to}?url=${id}`}>
       <CardLogo src={logoURI} alt={name} />

@@ -13,16 +13,16 @@ export interface IEventItem {
   root: string
 }
 
-export interface IEventList {
+export interface IProjectDetail {
   name: string
-  timestamp: string
-  version: { major: number; minor: number; patch: number }
-  logoURI: string
-  events: IEventItem[]
+  timestamp?: string
+  version?: { major: number; minor: number; patch: number }
+  logoURI?: string
+  events?: IEventItem[]
 }
 
 export interface IRenderItem {
-  list: IEventList | null
+  projectDetail: IProjectDetail | null
   loading?: boolean
   error?: boolean
 }
@@ -31,36 +31,39 @@ interface IRenderList {
   [key: string]: IRenderItem
 }
 
-export function getUrl(listID: string): string {
-  if (/^http(s)?:\/\//.test(listID)) {
-    return listID
+export function getUrl(projectID: string): string {
+  if (/^http(s)?:\/\//.test(projectID)) {
+    return projectID
   }
-  if (listID.endsWith('.eth')) {
-    return `https://wispy-bird-88a7.uniswap.workers.dev/?url=${`http://${listID}.link`}`
+  if (projectID.endsWith('.eth')) {
+    return `https://wispy-bird-88a7.uniswap.workers.dev/?url=${`http://${projectID}.link`}`
   }
 
   return ''
 }
 
-const useFetchEventList = (projectsID: string[], includeClaims?: boolean) => {
+const useFetchEventList = (
+  projectsID: string[],
+  isClaimsIncluded?: boolean
+) => {
   const { fetchData } = useFetch()
   const [renderList, setRenderList] = useState<IRenderList>({})
 
   const fetchEventList = useCallback(async () => {
     if (projectsID && projectsID.length > 0) {
       projectsID.forEach(projectID => {
-        fetchData<IEventList>(getUrl(projectID))
+        fetchData<IProjectDetail>(getUrl(projectID))
           .then(async eventList => {
-            if (includeClaims && eventList) {
-              const { events } = eventList
+            if (isClaimsIncluded && eventList) {
+              const { events = [] } = eventList
 
-              const fetchs = []
+              const fetchQueue = []
 
               for (const event of events) {
-                fetchs.push(fetchData<IClaim[]>(event.proofURI))
+                fetchQueue.push(fetchData<IClaim[]>(event.proofURI))
               }
 
-              const results = await Promise.allSettled(fetchs)
+              const results = await Promise.allSettled(fetchQueue)
               results.forEach((settled, i) => {
                 if (settled.status === 'fulfilled' && settled.value) {
                   const claims = settled.value
@@ -76,14 +79,14 @@ const useFetchEventList = (projectsID: string[], includeClaims?: boolean) => {
             setRenderList(list => ({
               ...list,
               [projectID]: {
-                list: eventList || null,
+                projectDetail: eventList || null,
                 error: eventList === undefined
               }
             }))
           })
       })
     }
-  }, [projectsID, fetchData, includeClaims])
+  }, [projectsID, fetchData, isClaimsIncluded])
 
   useEffect(() => {
     fetchEventList()
@@ -92,9 +95,9 @@ const useFetchEventList = (projectsID: string[], includeClaims?: boolean) => {
   return useMemo((): IRenderList => {
     const result: IRenderList = { ...renderList }
     projectsID.forEach(projectID => {
-      const { list, error } = renderList[projectID] || {}
+      const { projectDetail: list, error } = renderList[projectID] || {}
       result[projectID] = {
-        list,
+        projectDetail: list,
         loading: list === undefined,
         error
       }
