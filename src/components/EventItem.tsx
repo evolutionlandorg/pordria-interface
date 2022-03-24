@@ -117,11 +117,14 @@ const EventItem: FC<IEventItemProps> = ({ item, user }) => {
       throw new Error('event was claimed')
     }
 
-    if (!window.ethereum) {
+    const { ethereum } = window
+    if (!ethereum) {
       throw new Error('no wallet connected')
     }
 
-    const ethereumProvider = new providers.Web3Provider(window.ethereum)
+    const ethereumProvider = new providers.Web3Provider(
+      ethereum as providers.ExternalProvider
+    )
 
     const signer = ethereumProvider.getSigner()
 
