@@ -71,8 +71,8 @@ function CardList() {
     const r: JSX.Element[] = []
     Object.keys(projectDetailList).forEach(k => {
       const { loading, error, projectDetail } = projectDetailList[k]
-      const { name } = projects[k]
       if (!loading && !error) {
+        const { name } = projects[k]
         r.push(
           <Card
             key={k}
@@ -94,8 +94,8 @@ function CardList() {
   }
 
   const addProjectsHandler = () => {
-    setUrl('')
     addProjects(url)
+    setUrl('')
   }
 
   return (

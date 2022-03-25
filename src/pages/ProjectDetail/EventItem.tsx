@@ -1,7 +1,7 @@
 import { IEventItem } from '@/hooks/useFetchEventList'
 import React, { FC, useEffect, useState } from 'react'
 import styled from 'styled-components'
-import blockChainConfig from '@/config/block-chain'
+import chainConfig from '@/config/block-chain'
 import { BigNumber, Contract, providers } from 'ethers'
 import claimsABI from '@/config/block-chain/claims.abi.json'
 
@@ -52,7 +52,7 @@ const MAX_TIME = 2 ** 32 - 1
 
 const EventItem: FC<IEventItemProps> = ({ item, user }) => {
   const { name, detail, proofURI, chainId, address, claims, root } = item
-  const { rpcUrls } = blockChainConfig[chainId]
+  const { rpcUrls } = chainConfig[chainId]
 
   const [endTimestamp, setEndTimestamp] = useState<number | null>()
 

@@ -2,7 +2,7 @@ import React, { FC, useMemo } from 'react'
 import styled, { css } from 'styled-components'
 import { getUrl, IProjectDetail } from '@/hooks/useFetchEventList'
 import useProjects from '@/hooks/useProjects'
-import blockChainConfig from '@/config/block-chain'
+import chainConfig from '@/config/block-chain'
 
 const StyledInfo = styled.section`
   display: grid;
@@ -71,7 +71,7 @@ const ProjectDescription: FC<IProjectDescriptionProps> = ({
   const { projects } = useProjects()
   const chainName = useMemo(() => {
     if (chainID) {
-      return blockChainConfig[chainID].chainName
+      return chainConfig[chainID].chainName
     }
 
     return ''

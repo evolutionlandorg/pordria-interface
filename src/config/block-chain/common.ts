@@ -1,5 +1,6 @@
-export enum ChainEnum {
-  MUMBAI = 80001
+export enum ChainIDEnum {
+  MUMBAI = 80001,
+  CRAB = 44
 }
 
 export interface IChain {
@@ -15,6 +16,6 @@ export interface IChain {
   rpcUrls: string[]
 }
 
-export interface IBlockChain {
+export interface IChains {
   [key: string]: IChain
 }

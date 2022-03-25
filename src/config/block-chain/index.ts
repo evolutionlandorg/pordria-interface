@@ -1,7 +1,7 @@
 import developmentConfig from '@/config/block-chain/development'
 import productionConfig from '@/config/block-chain/production'
 
-const blockChainConfig =
+const chainConfig =
   process.env.NODE_ENV === 'production' ? productionConfig : developmentConfig
 
-export default blockChainConfig
+export default chainConfig

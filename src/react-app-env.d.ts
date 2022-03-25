@@ -1,4 +1,5 @@
 /// <reference types="react-scripts" />
+
 type EthereumEventMap = {
   accountsChanged: [accounts: string[]]
   disconnect: []
@@ -12,6 +13,7 @@ type EthereumRequestContentMap<T, U> = {
 type EthereumRequestMap = {
   wallet_addEthereumChain: EthereumRequestContentMap<unknown[], void>
   eth_accounts: EthereumRequestContentMap<void, string[]>
+  wallet_switchEthereumChain: EthereumRequestContentMap<unknown[], void>
 }
 
 interface Window {

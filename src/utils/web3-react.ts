@@ -1,14 +1,27 @@
-import { ChainEnum } from '@/config/block-chain/common'
+import { ChainIDEnum } from '@/config/block-chain/common'
 import { ethers } from 'ethers'
-import blockChainConfig from '@/config/block-chain'
+import chainConfig from '@/config/block-chain'
 import { InjectedConnector } from '@web3-react/injected-connector'
 import { WalletConnectConnector } from '@web3-react/walletconnect-connector'
-import { UnsupportedChainIdError, useWeb3React } from '@web3-react/core'
-import { useCallback } from 'react'
 import { AbstractConnector } from '@web3-react/abstract-connector'
-import { wait } from './misc'
 
 type Provider = ConstructorParameters<typeof ethers.providers.Web3Provider>[0]
+
+interface IEthereumError {
+  code: EthereumErrorCodeEnum
+  message: string
+  stack: string
+}
+
+export enum ConnectorTypeEnum {
+  INJECTED = 'injected',
+  WALLET_CONNECT = 'walletConnect'
+}
+
+enum EthereumErrorCodeEnum {
+  // This error code indicates that the chain has not been added to MetaMask.
+  UNRECOGNIZED_CHAIN_ID = 4902
+}
 
 export function getLibrary(provider: Provider) {
   const library = new ethers.providers.Web3Provider(provider)
@@ -17,77 +30,61 @@ export function getLibrary(provider: Provider) {
   return library
 }
 
-export function getConfig(chainName: ChainEnum) {
-  const { chainId, rpcUrls } = blockChainConfig[chainName]
+export function getConnector(
+  chainID: ChainIDEnum,
+  connectorType: ConnectorTypeEnum
+) {
+  const { rpcUrls } = chainConfig[chainID]
 
-  const chainIdNum = Number.parseInt(chainId, 16)
-
-  const injected = new InjectedConnector({
-    supportedChainIds: [chainIdNum]
-  })
-
-  const walletConnector = new WalletConnectConnector({
-    rpc: { [chainIdNum]: rpcUrls[Math.floor(Math.random() * rpcUrls.length)] },
-    qrcode: true
-  })
-
-  return {
-    injected,
-    walletConnector
-  }
-}
-
-export const changeChain = async (chainName: ChainEnum) => {
-  const { ethereum } = window
-  const chainConfig = blockChainConfig[chainName]
-  if (ethereum && ethereum.isMetaMask && chainConfig) {
-    await ethereum.request({
-      method: 'wallet_addEthereumChain',
-      params: [
-        {
-          ...chainConfig
-        }
-      ]
+  const connectors: { [key: string]: AbstractConnector } = {
+    [ConnectorTypeEnum.WALLET_CONNECT]: new WalletConnectConnector({
+      rpc: { [chainID]: rpcUrls[Math.floor(Math.random() * rpcUrls.length)] },
+      qrcode: true
+    }),
+    [ConnectorTypeEnum.INJECTED]: new InjectedConnector({
+      supportedChainIds: [chainID]
     })
-    await wait(500)
   }
+
+  return connectors[connectorType]
 }
 
-export const useConnectWallet = (onChange?: Function) => {
-  const { activate, deactivate, account } = useWeb3React()
-
-  const connectWallet = useCallback(
-    async (connector: AbstractConnector) => {
-      try {
-        await activate(connector, undefined, true)
-        const { ethereum } = window
-        if (ethereum && ethereum.on) {
-          ethereum.on('accountsChanged', accounts => {
-            if (accounts.length === 0) {
-              deactivate()
-            }
+/**
+ * Prompt the user to add BSC as a network on Metamask, or switch to BSC if the wallet is on a different network
+ * @returns {boolean} true if the setup succeeded, false otherwise
+ */
+export const setupNetwork = async (chainID: ChainIDEnum): Promise<boolean> => {
+  const { ethereum } = window
+  const config = chainConfig[chainID]
+  let result = false
+  if (ethereum && config) {
+    const { chainId } = config
+    try {
+      await ethereum.request({
+        method: 'wallet_switchEthereumChain',
+        params: [{ chainId }]
+      })
+      result = true
+    } catch (error) {
+      const { code } = error as IEthereumError
+      if (code === EthereumErrorCodeEnum.UNRECOGNIZED_CHAIN_ID) {
+        try {
+          await ethereum.request({
+            method: 'wallet_addEthereumChain',
+            params: [config]
           })
-
-          ethereum.on('disconnect', deactivate)
-        }
-      } catch (error) {
-        switch (true) {
-          case error instanceof UnsupportedChainIdError:
-            if (onChange) {
-              onChange()
-            }
-            break
-          default:
-            break
+          result = true
+        } catch (e) {
+          console.error('Failed to setup the network in Metamask:', e)
         }
       }
-    },
-    [activate, deactivate, onChange]
-  )
-
-  return {
-    connectWallet,
-    deactivate,
-    account
+      console.error('Failed to setup the network in Metamask:', error)
+    }
+  } else {
+    console.error(
+      "Can't setup the network on metamask because window.ethereum is undefined"
+    )
   }
+
+  return result
 }

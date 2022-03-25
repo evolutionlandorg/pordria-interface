@@ -1,9 +1,8 @@
-import { ChainEnum } from '@/config/block-chain/common'
-import { wait } from '@/utils/misc'
-import { changeChain, getConfig, useConnectWallet } from '@/utils/web3-react'
-import React, { FC, useMemo } from 'react'
+import React, { FC, useEffect } from 'react'
 import styled from 'styled-components'
 import Button from '@/components/Button'
+import useAuth from '@/hooks/useAuth'
+import { ConnectorTypeEnum } from '@/utils/web3-react'
 
 const Account = styled.div`
   display: inline-flex;
@@ -18,27 +17,15 @@ interface IWalletProps {
 }
 
 const Wallet: FC<IWalletProps> = ({ chainID }) => {
-  const onChange = async (chainName: ChainEnum) => {
-    // 二次确认
-    await wait(500)
-    await changeChain(chainName)
-  }
-  const { connectWallet, deactivate, account } = useConnectWallet(() => {
-    if (chainID) {
-      onChange(chainID)
-    }
-  })
-  const injected = useMemo(() => {
-    if (chainID) {
-      return getConfig(chainID).injected
-    }
+  const { connectWallet, disconnectWallet, account, setChainID } = useAuth()
 
-    return null
-  }, [chainID])
+  useEffect(() => {
+    setChainID(chainID)
+  }, [chainID, setChainID])
 
   if (!account) {
     return (
-      <Button onClick={() => injected && connectWallet(injected)}>
+      <Button onClick={() => connectWallet(ConnectorTypeEnum.INJECTED)}>
         connect wallet
       </Button>
     )
@@ -51,7 +38,7 @@ const Wallet: FC<IWalletProps> = ({ chainID }) => {
   return (
     <Account>
       <span>{accountEllipsis}</span>
-      <Button onClick={deactivate}>logout</Button>
+      <Button onClick={disconnectWallet}>logout</Button>
     </Account>
   )
 }

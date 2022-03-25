@@ -1,5 +1,5 @@
-import { IBlockChain } from '@/config/block-chain/common'
+import { IChains } from '@/config/block-chain/common'
 
-const config: IBlockChain = {}
+const config: IChains = {}
 
 export default config

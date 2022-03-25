@@ -1,4 +1,4 @@
-import { LocalKeys } from '@/config/db'
+import { LocalKeyEnum } from '@/config/db'
 import { useState } from 'react'
 import useFetch from '@/hooks/useFetch'
 
@@ -15,7 +15,7 @@ export default function useProjects() {
     Array<string>
   >([])
   const [projects, setProjects] = useState<IProjects>(() => {
-    const cache = localStorage.getItem(LocalKeys.AIRDROP_PROJECTS) || ''
+    const cache = localStorage.getItem(LocalKeyEnum.AIRDROP_PROJECTS) || ''
     let res
     try {
       res = JSON.parse(cache)
@@ -41,7 +41,7 @@ export default function useProjects() {
     }
 
     localStorage.setItem(
-      LocalKeys.AIRDROP_PROJECTS,
+      LocalKeyEnum.AIRDROP_PROJECTS,
       JSON.stringify(updatedProjects)
     )
 
