@@ -21,18 +21,24 @@ const useAuth = () => {
   const { activate, deactivate, account } = useWeb3React()
   const [chainID, setChainID] = useState<ChainIDEnum>()
 
+  const disconnectWallet = useCallback(() => {
+    // dispatch(profileClear())
+    deactivate()
+    window.localStorage.removeItem(LocalKeyEnum.CURRENT_CONNECTOR)
+  }, [deactivate])
+
   const connectedHandler = useCallback(() => {
     const { ethereum } = window
     if (ethereum && ethereum.on) {
       ethereum.on('accountsChanged', accounts => {
         if (accounts.length === 0) {
-          deactivate()
+          disconnectWallet()
         }
       })
 
-      ethereum.on('disconnect', deactivate)
+      ethereum.on('disconnect', disconnectWallet)
     }
-  }, [deactivate])
+  }, [disconnectWallet])
 
   const connectWallet = useCallback(
     async (connectorType: ConnectorTypeEnum) => {
@@ -96,12 +102,6 @@ const useAuth = () => {
 
     connectWallet(connector as ConnectorTypeEnum)
   }, [connectWallet])
-
-  const disconnectWallet = useCallback(() => {
-    // dispatch(profileClear())
-    deactivate()
-    window.localStorage.removeItem(LocalKeyEnum.CURRENT_CONNECTOR)
-  }, [deactivate])
 
   return { connectWallet, disconnectWallet, account, setChainID }
 }
