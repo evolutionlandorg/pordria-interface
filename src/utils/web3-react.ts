@@ -1,6 +1,5 @@
-import { ChainIDEnum } from '@/config/block-chain/common'
 import { ethers } from 'ethers'
-import chainConfig from '@/config/block-chain'
+import networkMap, { ChainIDEnum } from '@/config/network'
 import { InjectedConnector } from '@web3-react/injected-connector'
 import { WalletConnectConnector } from '@web3-react/walletconnect-connector'
 import { AbstractConnector } from '@web3-react/abstract-connector'
@@ -34,7 +33,7 @@ export function getConnector(
   chainID: ChainIDEnum,
   connectorType: ConnectorTypeEnum
 ) {
-  const { rpcUrls } = chainConfig[chainID]
+  const { rpcUrls } = networkMap[chainID]
 
   const connectors: { [key: string]: AbstractConnector } = {
     [ConnectorTypeEnum.WALLET_CONNECT]: new WalletConnectConnector({
@@ -55,7 +54,7 @@ export function getConnector(
  */
 export const setupNetwork = async (chainID: ChainIDEnum): Promise<boolean> => {
   const { ethereum } = window
-  const config = chainConfig[chainID]
+  const config = networkMap[chainID]
   let result = false
   if (ethereum && config) {
     const { chainId } = config

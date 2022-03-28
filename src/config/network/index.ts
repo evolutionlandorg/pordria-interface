@@ -1,6 +1,26 @@
-import { ChainIDEnum, IChains } from '@/config/block-chain/common'
+export enum ChainIDEnum {
+  MUMBAI = 80001,
+  CRAB = 44
+}
 
-const config: IChains = {
+export interface INetwork {
+  chainId: string
+  blockExplorerUrls: string[]
+  chainName: string
+  iconUrls: string[]
+  nativeCurrency: {
+    name: string
+    symbol: string
+    decimals: number
+  }
+  rpcUrls: string[]
+}
+
+export interface INetworkMap {
+  [key: string]: INetwork
+}
+
+const networkMap: INetworkMap = {
   [ChainIDEnum.MUMBAI]: {
     chainId: '0x13881',
     blockExplorerUrls: ['https://mumbai.polygonscan.com'],
@@ -29,4 +49,4 @@ const config: IChains = {
   }
 }
 
-export default config
+export default networkMap

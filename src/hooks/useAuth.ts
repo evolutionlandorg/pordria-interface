@@ -1,4 +1,4 @@
-import { ChainIDEnum } from '@/config/block-chain/common'
+import { ChainIDEnum } from '@/config/network'
 import { LocalKeyEnum } from '@/config/db'
 import { wait } from '@/utils/misc'
 import {

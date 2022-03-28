@@ -1,9 +1,9 @@
 import { IEventItem } from '@/hooks/useFetchEventList'
 import React, { FC, useEffect, useState } from 'react'
 import styled from 'styled-components'
-import chainConfig from '@/config/block-chain'
+import networkMap from '@/config/network'
 import { BigNumber, Contract, providers } from 'ethers'
-import claimsABI from '@/config/block-chain/claims.abi.json'
+import claimsABI from '@/config/network/claims.abi.json'
 
 const StyledItem = styled.div`
   display: grid;
@@ -52,7 +52,7 @@ const MAX_TIME = 2 ** 32 - 1
 
 const EventItem: FC<IEventItemProps> = ({ item, user }) => {
   const { name, detail, proofURI, chainId, address, claims, root } = item
-  const { rpcUrls } = chainConfig[chainId]
+  const { rpcUrls } = networkMap[chainId]
 
   const [endTimestamp, setEndTimestamp] = useState<number | null>()
 
