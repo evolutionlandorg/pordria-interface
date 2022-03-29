@@ -1,14 +1,19 @@
+import { radius, size } from '@/styles/variables'
 import React, { FC, MouseEventHandler } from 'react'
 import styled from 'styled-components'
 
 const StyledButton = styled.button`
-  font-size: 1rem;
+  display: inline-flex;
+  align-items: center;
+  font-size: ${size.tn};
   height: fit-content;
   text-align: center;
   padding: 0;
-  border: 0.5px solid #838383;
+  border: 1px solid #7a7a7a;
   padding: 8px;
-  border-radius: 8px;
+  border-radius: ${radius.md};
+  box-sizing: border-box;
+  font-weight: 600;
 
   :hover {
     border-color: #333;
