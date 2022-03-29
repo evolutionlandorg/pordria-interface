@@ -15,6 +15,7 @@ module.exports = {
   },
   plugins: ['@typescript-eslint', 'prettier', 'jest', 'import'],
   rules: {
+    'react/jsx-props-no-spreading': 'off',
     'import/no-unresolved': 'error',
     'prettier/prettier': 'error',
     'react/function-component-definition': [
