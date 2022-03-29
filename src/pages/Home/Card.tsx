@@ -1,8 +1,10 @@
 import React, { FC } from 'react'
 import { Link, LinkProps } from 'react-router-dom'
 import styled from 'styled-components'
-import { ArrowRightIcon } from '@primer/octicons-react'
 import { IRenderItem } from '@/hooks/useFetchEventList'
+import { computeSize, radius, size } from '@/styles/variables'
+import { ArrowRightIcon } from '@/components/Icon'
+import Img from '@/components/Image'
 
 interface CardProps extends LinkProps {
   item: IRenderItem
@@ -10,46 +12,50 @@ interface CardProps extends LinkProps {
 }
 
 const HoverCard = styled(Link)`
-  box-sizing: border-box;
   cursor: pointer;
-  border-radius: 8px;
-  padding: 1.5rem;
-  max-width: 12.75rem;
+  border-radius: ${radius.lg};
+  padding: ${computeSize(30)} ${computeSize(20)};
+  max-width: ${computeSize(138)};
   display: flex;
   justify-content: space-between;
   flex-direction: column;
-  background-color: white;
-  text-decoration: none;
-  color: #0f0f0f;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-  transition: transform 0.25s ease-in-out;
+  color: #212121;
+  box-shadow: 0px 4px 4px rgba(124, 255, 247, 0.25);
+  border: 1px solid transparent;
+  background-clip: padding-box, border-box;
+  background-origin: padding-box, border-box;
+  background-image: linear-gradient(to right, #fff, #fff),
+    linear-gradient(270deg, #a8fbff, #81c2ff, #f9d0fa);
+
+  will-change: transform, background-image, box-shadow;
+  transition: transform 0.25s ease-in-out, background-image 1s ease-in-out;
 
   @media screen and (max-width: 960px) {
     max-width: initial;
   }
 
   @media screen and (max-width: 414px) {
-    width: 21.875rem;
+    width: 100%;
   }
 
   :hover {
-    transform: translateY(-10px);
+    transform: scale(1.1);
+    background-image: linear-gradient(to right, #fff, #fff),
+      linear-gradient(270deg, #12d6df, #db12df);
+    box-shadow: 0px 4px 4px rgba(153, 117, 255, 0.25);
   }
 `
 
-const CardLogo = styled.img`
-  max-width: 4rem;
-  margin-bottom: 2rem;
-`
-
 const CardTitle = styled.h3`
-  font-size: 1.25rem;
-  line-height: 150%;
-  margin-bottom: 1.4rem;
+  font-size: ${size.md};
+  margin: 9px 0;
 `
 
 const Details = styled.span`
+  font-size: ${size.sm};
   width: 100%;
+  font-weight: 600;
+  margin-bottom: 9px;
 `
 
 const Card: FC<CardProps> = ({ to, item, id }) => {
@@ -57,11 +63,10 @@ const Card: FC<CardProps> = ({ to, item, id }) => {
   const { logoURI, name } = projectDetail || {}
   return (
     <HoverCard to={`${to}?url=${id}`}>
-      <CardLogo src={logoURI} alt={name} />
+      <Img src={logoURI} alt={name} />
       <CardTitle>{name}</CardTitle>
-      <Details>
-        Details <ArrowRightIcon />
-      </Details>
+      <Details>Details</Details>
+      <ArrowRightIcon width={computeSize(12)} />
     </HoverCard>
   )
 }

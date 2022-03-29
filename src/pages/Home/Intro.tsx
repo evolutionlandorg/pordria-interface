@@ -1,14 +1,16 @@
+import { computeSize, size } from '@/styles/variables'
 import React from 'react'
 import styled from 'styled-components'
 
 const IntroContainer = styled.section`
   display: flex;
   flex-direction: column;
-  gap: 0.625rem;
-  margin-top: 6rem;
+  gap: ${computeSize(40)};
+  margin-top: ${computeSize(80)};
   position: sticky;
-  top: 10rem;
+  top: ${computeSize(140)};
   height: fit-content;
+  max-width: ${computeSize(380)};
 
   @media screen and (max-width: 960px) {
     position: relative;
@@ -19,12 +21,12 @@ const IntroContainer = styled.section`
 
 const Title = styled.h1`
   text-align: left;
-  font-size: 3rem;
-  line-height: 125%;
+  font-size: ${size.h1};
+  line-height: ${computeSize(64)};
   letter-spacing: 0.002em;
   color: #1f1f1f;
   margin: 0;
-  max-width: 28.125rem;
+  max-width: 100%;
 
   @media screen and (max-width: 960px) {
     font-size: 2.1875rem;
@@ -32,9 +34,11 @@ const Title = styled.h1`
 `
 
 const Description = styled.span`
-  font-size: 1.25rem;
+  font-size: ${size.lg};
   line-height: 150%;
-  max-width: 25rem;
+  max-width: 100%;
+  font-weight: 600;
+  color: #212121;
 `
 
 function Intro() {

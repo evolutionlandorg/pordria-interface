@@ -4,21 +4,37 @@ import { PROJECT_DETAIL } from '@/config/routers'
 import useFetchEventList from '@/hooks/useFetchEventList'
 import Button from '@/components/Button'
 import useProjects from '@/hooks/useProjects'
+import { computeSize, size } from '@/styles/variables'
 import Card from './Card'
 
+const StyledAllLists = styled.section`
+  min-height: 80vh;
+  height: fit-content;
+  width: 100%;
+  padding: ${computeSize(70)} 0 ${computeSize(84)} 0;
+  display: grid;
+  gap: 24px;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+
+  @media screen and (max-width: 960px) {
+    padding: 0;
+    align-items: flex-start;
+  }
+`
+
 const CardWrapper = styled.div`
-  padding: 5rem 0 6rem 0;
+  padding-bottom: ${computeSize(75)};
   display: grid;
   flex-wrap: wrap;
   justify-content: flex-start;
-  max-width: 45rem;
-  min-width: 45rem;
-  grid-gap: 1.5rem;
+  max-width: ${computeSize(600)};
+  min-width: ${computeSize(600)};
+  grid-gap: ${computeSize(30)};
   grid-template-columns: 1fr 1fr 1fr;
 
   @media screen and (max-width: 960px) {
-    max-width: initial;
-    min-width: initial;
     grid-template-columns: 1fr 1fr;
   }
 
@@ -28,22 +44,6 @@ const CardWrapper = styled.div`
     max-width: initial;
     min-width: initial;
     grid-template-columns: 1fr;
-  }
-`
-
-const StyledAllLists = styled.section`
-  min-height: 80vh;
-  width: 100%;
-  padding: 5rem 0 6rem 0;
-  display: grid;
-  gap: 24px;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: flex-start;
-  height: fit-content;
-  @media screen and (max-width: 960px) {
-    padding: 0;
-    align-items: flex-start;
   }
 `
 
@@ -58,7 +58,13 @@ const ListAddress = styled.input`
   outline: none;
   display: block;
   flex: 1;
-  font-size: 1rem;
+  font-size: ${size.sm};
+  background-color: transparent;
+  font-weight: 600;
+
+  ::placeholder {
+    color: #7a7a7a;
+  }
 `
 
 function CardList() {
@@ -72,15 +78,15 @@ function CardList() {
     Object.keys(projectDetailList).forEach(k => {
       const { loading, error, projectDetail } = projectDetailList[k]
       if (!loading && !error) {
-        const { name } = projects[k]
         r.push(
           <Card
             key={k}
             to={PROJECT_DETAIL}
             id={k}
             item={{
-              projectDetail: projectDetail || {
-                name
+              projectDetail: {
+                ...projects[k],
+                ...projectDetail
               },
               loading,
               error
