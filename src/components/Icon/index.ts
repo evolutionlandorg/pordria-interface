@@ -1,0 +1,5 @@
+export { ReactComponent as PlusIcon } from '@/components/Icon/svg/PlusIcon.svg'
+export { ReactComponent as GithubIcon } from '@/components/Icon/svg/GithubIcon.svg'
+export { ReactComponent as LogoIcon } from '@/components/Icon/svg/LogoIcon.svg'
+export { ReactComponent as ArrowRightIcon } from '@/components/Icon/svg/ArrowRightIcon.svg'
+export { ReactComponent as ImgFallbackIcon } from '@/components/Icon/svg/ImgFallbackIcon.svg'
