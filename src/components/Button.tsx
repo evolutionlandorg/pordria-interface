@@ -1,38 +1,73 @@
-import { radius, size } from '@/styles/variables'
+import {
+  baseColor,
+  computeSize,
+  radius,
+  color,
+  size,
+  weight
+} from '@/styles/variables'
 import React, { FC, MouseEventHandler } from 'react'
 import styled from 'styled-components'
 
-const StyledButton = styled.button`
-  display: inline-flex;
-  align-items: center;
-  font-size: ${size.tn};
-  height: fit-content;
-  text-align: center;
-  padding: 0;
-  border: 1px solid #7a7a7a;
-  padding: 8px;
-  border-radius: ${radius.md};
-  box-sizing: border-box;
-  font-weight: 600;
-
-  :hover {
-    border-color: #333;
-    background-color: rgba(51, 51, 51, 0.1);
-  }
-`
-
-interface IButtonProps {
+interface IStyledButtonProps {
+  width?: string
+  large?: boolean
+}
+interface IButtonProps extends IStyledButtonProps {
   onClick?: MouseEventHandler<HTMLButtonElement> | undefined
 }
 
-const Button: FC<IButtonProps> = ({ onClick, children }) => (
-  <StyledButton type="button" onClick={onClick}>
+const StyledButton = styled.button<IStyledButtonProps>`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: ${size.tn};
+  height: fit-content;
+  text-align: center;
+  border: 1px solid ${baseColor.secondary};
+  padding: ${({ large }) => {
+    if (large) {
+      return `${computeSize(8)} ${computeSize(40)}`
+    }
+
+    return computeSize(8)
+  }};
+  border-radius: ${radius.md};
+  box-sizing: border-box;
+  font-weight: ${weight.semiBold};
+  width: ${({ width }) => width};
+
+  :hover {
+    border-color: ${baseColor.darkBlack};
+    background-color: ${color.buttonHover};
+  }
+
+  :not(:last-of-type) {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-right-color: transparent;
+  }
+
+  :not(:first-of-type) {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+
+  @media screen and (max-width: 414px) {
+    padding: ${computeSize(8)};
+  }
+`
+
+const Button: FC<IButtonProps> = ({ onClick, children, ...styleProps }) => (
+  <StyledButton {...styleProps} type="button" onClick={onClick}>
     {children}
   </StyledButton>
 )
 
 Button.defaultProps = {
-  onClick: undefined
+  onClick: undefined,
+  width: 'fit-content',
+  large: false
 }
 
 export default Button

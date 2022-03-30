@@ -25,15 +25,15 @@ const Wallet: FC<IWalletProps> = ({ chainID }) => {
 
   if (!account) {
     return (
-      <Button onClick={() => connectWallet(ConnectorTypeEnum.INJECTED)}>
+      <Button large onClick={() => connectWallet(ConnectorTypeEnum.INJECTED)}>
         connect wallet
       </Button>
     )
   }
 
-  const accountEllipsis = account
-    ? `${account.substring(0, 6)}...${account.substring(account.length - 4)}`
-    : null
+  const accountEllipsis = `${account.substring(0, 6)}...${account.substring(
+    account.length - 4
+  )}`
 
   return (
     <Account>
