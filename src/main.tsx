@@ -2,16 +2,15 @@ import Header from '@/components/Header'
 import React from 'react'
 import { Outlet } from 'react-router-dom'
 import styled from 'styled-components'
+import Notifications from '@/components/Notifications'
+import { gradient } from './styles/variables'
 
 const App = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-image: linear-gradient(
-    285.42deg,
-    rgba(133, 156, 234, 0.05) 1.17%,
-    rgba(173, 255, 255, 0.1) 100.94%
-  );
+  min-height: 100vh;
+  background-image: ${gradient.background};
 `
 
 function Layout() {
@@ -19,6 +18,7 @@ function Layout() {
     <App>
       <Header />
       <Outlet />
+      <Notifications />
     </App>
   )
 }

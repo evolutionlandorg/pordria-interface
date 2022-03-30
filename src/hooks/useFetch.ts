@@ -1,4 +1,5 @@
 import { useCallback, useState } from 'react'
+import toast from 'react-hot-toast'
 
 interface IFetchErrorConstructor {
   code: number
@@ -34,7 +35,7 @@ const useFetch = () => {
         res = await response.json()
       } catch (e) {
         if (e instanceof Error) {
-          // throw
+          toast.error(e.message)
         }
       }
 

@@ -4,43 +4,38 @@ import styled from 'styled-components'
 import networkMap from '@/config/network'
 import { BigNumber, Contract, providers } from 'ethers'
 import claimsABI from '@/config/network/claims.abi.json'
+import toast from 'react-hot-toast'
+import Button from '@/components/Button'
+import { baseColor, computeSize, size, weight } from '@/styles/variables'
 
-const StyledItem = styled.div`
+export const ItemContainer = styled.div`
   display: grid;
   grid-gap: 1rem;
-  grid-template-columns: 128px 96px 96px 1fr 96px;
+  grid-template-columns: ${computeSize(128)} ${computeSize(96)} 1fr ${computeSize(
+      104
+    )};
   align-items: center;
   margin-bottom: 1rem;
+  font-size: ${size.sm};
+  font-weight: ${weight.semiBold};
+  color: ${baseColor.onPrimary};
+
+  @media screen and (max-width: 414px) {
+    span {
+      display: none;
+      :last-child,
+      :first-child {
+        display: block;
+      }
+    }
+
+    grid-template-columns: 1fr ${computeSize(104)};
+  }
 `
 
 const Opts = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
-`
-
-const StyledButton = styled.button`
-  font-size: 0.9rem;
-  height: fit-content;
-  text-align: center;
-  padding: 0;
-  border: 0.5px solid #838383;
-  padding: 4px;
-  border-radius: 8px;
-  :not(:last-of-type) {
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
-    border-right-color: transparent;
-  }
-
-  :not(:first-of-type) {
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
-  }
-
-  :hover {
-    border-color: #333;
-    background-color: rgba(51, 51, 51, 0.1);
-  }
 `
 
 interface IEventItemProps {
@@ -100,70 +95,79 @@ const EventItem: FC<IEventItemProps> = ({ item, user }) => {
   }
 
   const claim = async () => {
-    if (!root || !claims) {
-      throw new Error('data loading...')
-    }
+    try {
+      if (!root || !claims) {
+        throw new Error('data loading...')
+      }
 
-    if (endTimestamp && Date.now() > endTimestamp) {
-      throw new Error('event expired')
-    }
+      if (endTimestamp && Date.now() > endTimestamp) {
+        throw new Error('event expired')
+      }
 
-    const provider = new providers.JsonRpcBatchProvider(rpcUrls[0])
-    const contract = new Contract(address, claimsABI, provider)
+      const provider = new providers.JsonRpcBatchProvider(rpcUrls[0])
+      const contract = new Contract(address, claimsABI, provider)
 
-    const isClaimed = await contract.getClaimedStatus(user, [root])
+      try {
+        const [isClaimed] = await contract.getClaimedStatus(user, [root])
 
-    if (!isClaimed) {
-      throw new Error('event was claimed')
-    }
+        if (isClaimed) {
+          throw new Error()
+        }
+      } catch (error) {
+        throw new Error('event was claimed')
+      }
 
-    const { ethereum } = window
-    if (!ethereum) {
-      throw new Error('no wallet connected')
-    }
+      const { ethereum } = window
+      if (!ethereum) {
+        throw new Error('no wallet connected')
+      }
 
-    const ethereumProvider = new providers.Web3Provider(
-      ethereum as providers.ExternalProvider
-    )
+      const ethereumProvider = new providers.Web3Provider(
+        ethereum as providers.ExternalProvider
+      )
 
-    const signer = ethereumProvider.getSigner()
+      const signer = ethereumProvider.getSigner()
 
-    const contractWithSigner = new Contract(address, claimsABI, signer)
+      const contractWithSigner = new Contract(address, claimsABI, signer)
 
-    let userClaim: IClaim | undefined
-    for (const c of claims) {
-      const { to } = c
-      if (to.toLowerCase() === user.toLowerCase()) {
-        userClaim = c
+      let userClaim: IClaim | undefined
+      for (const c of claims) {
+        const { to } = c
+        if (to.toLowerCase() === user.toLowerCase()) {
+          userClaim = c
+        }
+      }
+
+      if (!userClaim) {
+        throw new Error('no proof')
+      }
+
+      await contractWithSigner.claimMultipleTokens(
+        root,
+        userClaim,
+        userClaim.proof
+      )
+    } catch (error) {
+      if (error instanceof Error) {
+        toast.error(error.message)
       }
     }
-
-    if (!userClaim) {
-      throw new Error('no proof')
-    }
-
-    await contractWithSigner.claimMultipleTokens(
-      root,
-      userClaim,
-      userClaim.proof
-    )
   }
 
   return (
-    <StyledItem>
+    <ItemContainer>
       <span>{name}</span>
-      <span>-</span>
       <span>{formateDate()}</span>
       <span>{detail}</span>
       <Opts>
-        <StyledButton type="button" onClick={claim}>
+        <Button onClick={claim} width="100%">
           Claim
-        </StyledButton>
-        <StyledButton type="button" onClick={openProof}>
+        </Button>
+        <Button onClick={openProof} width="100%">
           List
-        </StyledButton>
+        </Button>
       </Opts>
-    </StyledItem>
+    </ItemContainer>
   )
 }
 

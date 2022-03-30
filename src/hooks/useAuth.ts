@@ -16,6 +16,7 @@ import {
   WalletConnectConnector
 } from '@web3-react/walletconnect-connector'
 import { useCallback, useEffect, useState } from 'react'
+import toast from 'react-hot-toast'
 
 const useAuth = () => {
   const { activate, deactivate, account } = useWeb3React()
@@ -35,15 +36,12 @@ const useAuth = () => {
           disconnectWallet()
         }
       })
-
-      ethereum.on('disconnect', disconnectWallet)
     }
   }, [disconnectWallet])
 
   const connectWallet = useCallback(
     async (connectorType: ConnectorTypeEnum) => {
       if (!chainID) {
-        // throw error if not ready
         return
       }
 
@@ -55,13 +53,14 @@ const useAuth = () => {
       } catch (error) {
         try {
           if (error instanceof UnsupportedChainIdError) {
+            toast.error('Unsupported network, trying to connect to another')
+            await wait(1000)
             const hasSetup = await setupNetwork(chainID)
             if (hasSetup) {
               await activate(connector)
-              await wait(500)
-              connectedHandler()
+              return
             }
-            return
+            throw new Error('Unsupported network')
           }
 
           if (error instanceof NoEthereumProviderError) {
@@ -86,7 +85,7 @@ const useAuth = () => {
         } catch (err) {
           window.localStorage.removeItem(LocalKeyEnum.CURRENT_CONNECTOR)
           if (err instanceof Error) {
-            // toast err message
+            toast.error(err.message)
           }
         }
       }
