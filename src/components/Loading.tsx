@@ -1,56 +1,55 @@
+import { computeSize, size, weight } from '@/styles/variables'
 import React from 'react'
-import styled, { css, keyframes } from 'styled-components'
-
-const bounce = keyframes`
-  0%,
-  100% {
-    transform: scale(0);
-  }
-  50% {
-    transform: scale(1);
-  }
-`
-
-const spin = keyframes`
-  100% {
-    transform: rotate(360deg);
-  }
-`
+import styled, { keyframes } from 'styled-components'
+import { LoadingIcon } from './Icon'
 
 const LoadingWrap = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-top: ${computeSize(122)};
+  font-size: ${size.sm};
+  font-weight: ${weight.semiBold};
+`
+const LoadingRocket = styled(LoadingIcon)`
+  width: ${computeSize(30)};
+`
+
+const dot = keyframes`
+  0% {
+    transform: translateX(0.5ch);
+  }
+
+  50% {
+    transform: translateX(1ch);
+  }
+
+  100% {
+    transform: translateX(1.5ch);
+  }
+`
+
+const Dot = styled.span`
   position: relative;
-  width: 3rem;
-  height: 3rem;
-  margin: 0 auto;
-  animation: ${spin} 2s linear infinite;
-`
 
-const StyledCircle = css`
-  position: absolute;
-  top: 0;
-  width: 25px;
-  height: 25px;
-  border-radius: 100%;
-  background-color: rgba(0, 0, 0, 0.3);
-  animation: ${bounce} 2s ease-in-out infinite;
-`
-
-const Circle1 = styled.div`
-  ${StyledCircle}
-`
-
-const Circle2 = styled.div`
-  ${StyledCircle}
-  top: auto;
-  bottom: 0;
-  animation-delay: -1s;
+  ::before {
+    content: '';
+    background-color: white;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    animation: ${dot} 2s steps(3, end) infinite;
+  }
 `
 
 function Loading() {
   return (
     <LoadingWrap>
-      <Circle1 />
-      <Circle2 />
+      <LoadingRocket />
+      <p>
+        Loading<Dot>...</Dot>
+      </p>
     </LoadingWrap>
   )
 }
