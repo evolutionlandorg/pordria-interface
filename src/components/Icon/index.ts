@@ -3,3 +3,8 @@ export { ReactComponent as GithubIcon } from '@/components/Icon/svg/GithubIcon.s
 export { ReactComponent as LogoIcon } from '@/components/Icon/svg/LogoIcon.svg'
 export { ReactComponent as ArrowRightIcon } from '@/components/Icon/svg/ArrowRightIcon.svg'
 export { ReactComponent as ImgFallbackIcon } from '@/components/Icon/svg/ImgFallbackIcon.svg'
+export { ReactComponent as SearchIcon } from '@/components/Icon/svg/SearchIcon.svg'
+export { ReactComponent as LoadingIcon } from '@/components/Icon/svg/LoadingIcon.svg'
+export { ReactComponent as CheckCircleFillIcon } from '@/components/Icon/svg/CheckCircleFillIcon.svg'
+export { ReactComponent as XCircleFillIcon } from '@/components/Icon/svg/XCircleFillIcon.svg'
+export { ReactComponent as XIcon } from '@/components/Icon/svg/XIcon.svg'
