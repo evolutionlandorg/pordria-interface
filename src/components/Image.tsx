@@ -6,7 +6,7 @@ import React, {
   useState
 } from 'react'
 import { ImgFallbackIcon } from '@/components/Icon'
-import { computeSize } from '@/styles/variables'
+import { baseColor, computeSize } from '@/styles/variables'
 import styled, { css } from 'styled-components'
 
 interface IImageProps
@@ -15,10 +15,10 @@ interface IImageProps
     HTMLImageElement
   > {}
 
-const imgCommon = css`
-  min-width: ${computeSize(64)};
-  max-width: ${computeSize(64)};
-  fill: #212121;
+const imgCommon = css<IImageProps>`
+  min-width: ${({ width }) => width || computeSize(64)};
+  max-width: ${({ width }) => width || computeSize(64)};
+  fill: ${baseColor.onPrimary};
 `
 
 const ImgFallback = styled(ImgFallbackIcon)`
@@ -42,6 +42,7 @@ const Img: FC<IImageProps> = ({ ref, ...props }) => {
       setLoading(false)
     })
     image.addEventListener('load', () => {
+      setError(false)
       setLoading(false)
     })
 
