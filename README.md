@@ -1,46 +1,61 @@
-# Getting Started with Create React App
+# Pordria
+[1]: placeholder
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Pordria is an airdrop aggregator supporting ERC - 20, ERC - 721, ERC - 1155 assets to be airdropped on Ethereum, Polygon, Heco, and Crab.
 
-## Available Scripts
+## How it works
 
-In the project directory, you can run:
+This is a permissionless airdrop protocol, which can be used by both projects and individuals to send users airdrops of various assets simply and quickly. It uses the Merkle tree to ensure that airdrops are accurately and safely claimed by users, and saves gas for projects.
 
-### `yarn start`
+## Usage
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### As a cooperator
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+**Before submit your project details, please check [event list json schema](1) to follow the JSON specification.**
 
-### `yarn test`
+As long as the JSON specification is followed properly, please submit an issue via [this link](https://github.com/evolutionlandorg/pordria-interface/issues/new?assignees=&labels=add-project-request&template=add-project-request.md&title=Request%3A+add+%7BProject+name%7D).
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### As a user
+#### Find the project of event or airdrop
 
-### `yarn build`
+If the event or the airdrop is **from our cooperators**, please check it on [Pordria Homepage]().
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+If you **cannot** find the event or airdrop on our website, please check the bottom of the website, then input a url which returns a result following the structure below
+```json
+{
+ "[url]": {
+    "name": "",
+    "homepage": ""
+  },
+  ...
+}
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+|  params  |  description  |
+| :------: | :----: |
+|  [url]   | the url of a json file and the json file should follow this [json schema](1) |
+|   name   |  project name  |
+| homepage |  the official website url of the project manager   |
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+For example,
+```json
+{
+ "https://example.com/project1.json": {
+    "name": "project1 name",
+    "homepage": "https://example.com"
+  },
+  "https://example.com/project2.json": {
+    "name": "project2 name",
+    "homepage": "https://example2.com"
+  },
+  ...
+}
+```
+and press the button 'add a list' to import your project.
 
-### `yarn eject`
+#### Claim airdrops
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+After you find the project, click into the project and paste the address of the claimer into the top search input box. Be aware that you can also claim airdrops for others; make sure that the address you wish to claim for is valid before you do so.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Event list will be refreshed once you press enter or click 'confirm' button. If you are eligible to claim a airdrop, 'Claim' button on the right side will be activated.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
