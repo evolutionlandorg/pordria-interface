@@ -97,11 +97,11 @@ const EventItem: FC<IEventItemProps> = ({ item, user }) => {
   const claim = async () => {
     try {
       if (!root || !claims) {
-        throw new Error('data loading...')
+        throw new Error('Data loading...')
       }
 
       if (endTimestamp && Date.now() > endTimestamp) {
-        throw new Error('event expired')
+        throw new Error('Airdrop expired')
       }
 
       const provider = new providers.JsonRpcBatchProvider(rpcUrls[0])
@@ -114,12 +114,12 @@ const EventItem: FC<IEventItemProps> = ({ item, user }) => {
           throw new Error()
         }
       } catch (error) {
-        throw new Error('event was claimed')
+        throw new Error('Airdrop was claimed')
       }
 
       const { ethereum } = window
       if (!ethereum) {
-        throw new Error('no wallet connected')
+        throw new Error('No wallet connected')
       }
 
       const ethereumProvider = new providers.Web3Provider(
@@ -139,7 +139,7 @@ const EventItem: FC<IEventItemProps> = ({ item, user }) => {
       }
 
       if (!userClaim) {
-        throw new Error('no proof')
+        throw new Error('No proof')
       }
 
       await contractWithSigner.claimMultipleTokens(
