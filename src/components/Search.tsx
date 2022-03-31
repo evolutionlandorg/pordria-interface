@@ -1,9 +1,4 @@
-import React, {
-  ChangeEventHandler,
-  FC,
-  FocusEventHandler,
-  MouseEventHandler
-} from 'react'
+import React, { ChangeEventHandler } from 'react'
 import styled from 'styled-components'
 import { baseColor, computeSize, radius, size } from '@/styles/variables'
 import { SearchIcon } from '@/components/Icon'
@@ -53,32 +48,27 @@ const StyledButton = styled.button`
 `
 
 interface ISearchProps {
-  onSearch: MouseEventHandler<HTMLButtonElement>
+  onSearch: (search?: string) => void
   onChange: ChangeEventHandler<HTMLInputElement>
-  onFocus: FocusEventHandler<HTMLInputElement>
-  onBlur: FocusEventHandler<HTMLInputElement>
   className?: string
   value?: string
 }
 
-const Search: FC<ISearchProps> = ({
-  onChange,
-  onSearch,
-  onFocus,
-  onBlur,
-  className,
-  value
-}) => (
-  <StyledSearch className={className} onSubmit={e => e.preventDefault()}>
+const Search = ({ onChange, onSearch, className, value }: ISearchProps) => (
+  <StyledSearch
+    className={className}
+    onSubmit={e => {
+      e.preventDefault()
+      onSearch(value)
+    }}
+  >
     <StyledInput
       type="search"
       placeholder="Search by address"
       onChange={onChange}
-      onFocus={onFocus}
-      onBlur={onBlur}
       value={value}
     />
-    <StyledButton type="button" onClick={onSearch}>
+    <StyledButton type="button" onClick={() => onSearch(value)}>
       <SearchIcon />
     </StyledButton>
   </StyledSearch>

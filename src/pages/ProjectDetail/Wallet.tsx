@@ -3,13 +3,14 @@ import styled from 'styled-components'
 import Button from '@/components/Button'
 import useAuth from '@/hooks/useAuth'
 import { ConnectorTypeEnum } from '@/utils/web3-react'
+import { size } from '@/styles/variables'
 
 const Account = styled.div`
   display: inline-flex;
   width: fit-content;
   align-items: center;
   gap: 1rem;
-  font-size: 1rem;
+  font-size: ${size.tn};
 `
 
 interface IWalletProps {
