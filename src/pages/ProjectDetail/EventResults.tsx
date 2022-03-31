@@ -54,7 +54,7 @@ const EventResults = ({ list = [], chainID }: IEventResultsProps) => {
   const fuse = useMemo(
     () =>
       new Fuse(list, {
-        threshold: 0.0,
+        threshold: 0.1,
         keys: ['claims.to']
       }),
     [list]
