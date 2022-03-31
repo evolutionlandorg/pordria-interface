@@ -45,7 +45,7 @@ const HoverCard = styled(Link)`
   }
 
   :hover {
-    transform: scale(1.1);
+    transform: perspective(1px) scale(1.1);
     background-image: ${gradient.cardHover};
     box-shadow: 0px 4px 4px ${color.cardHoverShadow};
   }
