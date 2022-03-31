@@ -3,7 +3,6 @@ import styled from 'styled-components'
 import Search from '@/components/Search'
 import { IEventItem } from '@/hooks/useFetchEventList'
 import { baseColor, computeSize, size, weight } from '@/styles/variables'
-import Fuse from 'fuse.js'
 import EventItem, { ItemContainer } from './EventItem'
 import Wallet from './Wallet'
 
@@ -50,20 +49,28 @@ const EventResults = ({ list = [], chainID }: IEventResultsProps) => {
   const [roots, setRoots] = useState<string[]>([])
   const [user, setUser] = useState('')
   const [searchValue, setSearchValue] = useState('')
-  const fuse = useMemo(
-    () =>
-      new Fuse(list, {
-        threshold: 0.1,
-        keys: ['claims.to']
-      }),
-    [list]
-  )
+  const searchResource = useMemo(() => {
+    const res: { [key: string]: string[] } = {}
+    list.forEach(({ root, claims }) => {
+      claims.forEach(({ to }) => {
+        const lowerCaseTo = to.toLowerCase()
+        const hasTo = Array.isArray(res[lowerCaseTo])
+        if (!hasTo) {
+          res[lowerCaseTo] = []
+        }
+
+        res[lowerCaseTo].push(root)
+      })
+    })
+
+    return res
+  }, [list])
 
   const search = (value: string) => {
-    const searchResult = fuse.search(value)
+    const searchResult = searchResource[value] || []
     setUser(value)
 
-    setRoots(searchResult.map(({ item }) => item.root))
+    setRoots(searchResult)
   }
 
   const renderEvents = () =>

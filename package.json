@@ -15,7 +15,6 @@
     "@web3-react/walletconnect-connector": "^6.2.13",
     "copy-to-clipboard": "^3.3.1",
     "ethers": "^5.6.1",
-    "fuse.js": "^6.5.3",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-hot-toast": "^2.2.0",
