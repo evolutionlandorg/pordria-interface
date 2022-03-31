@@ -4,7 +4,8 @@ import { PROJECT_DETAIL } from '@/config/routers'
 import useFetchEventList from '@/hooks/useFetchEventList'
 import Button from '@/components/Button'
 import useProjects from '@/hooks/useProjects'
-import { computeSize, size } from '@/styles/variables'
+import { baseColor, computeSize, size, weight } from '@/styles/variables'
+import { PlusIcon } from '@/components/Icon'
 import Card from './Card'
 
 const StyledAllLists = styled.section`
@@ -48,7 +49,7 @@ const CardWrapper = styled.div`
 `
 
 const AddList = styled.div`
-  border-bottom: 0.5px solid #838383;
+  border-bottom: 0.5px solid ${baseColor.gray};
   display: inline-flex;
   padding: 8px;
 `
@@ -60,11 +61,15 @@ const ListAddress = styled.input`
   flex: 1;
   font-size: ${size.sm};
   background-color: transparent;
-  font-weight: 600;
+  font-weight: ${weight.semiBold};
 
   ::placeholder {
-    color: #7a7a7a;
+    color: ${baseColor.secondary};
   }
+`
+
+const Plus = styled(PlusIcon)`
+  width: ${size.tn};
 `
 
 function CardList() {
@@ -98,9 +103,11 @@ function CardList() {
 
     return r
   }
-
-  const addProjectsHandler = () => {
-    addProjects(url)
+  const addProjectsHandler = async () => {
+    if (!url) {
+      return
+    }
+    await addProjects(url)
     setUrl('')
   }
 
@@ -114,7 +121,9 @@ function CardList() {
           onChange={e => setUrl(e.target.value)}
           value={url}
         />
-        <Button onClick={addProjectsHandler}>+ add a list</Button>
+        <Button onClick={addProjectsHandler}>
+          <Plus /> add a list
+        </Button>
       </AddList>
     </StyledAllLists>
   )

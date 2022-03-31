@@ -2,7 +2,15 @@ import React, { FC } from 'react'
 import { Link, LinkProps } from 'react-router-dom'
 import styled from 'styled-components'
 import { IRenderItem } from '@/hooks/useFetchEventList'
-import { computeSize, radius, size } from '@/styles/variables'
+import {
+  baseColor,
+  color,
+  computeSize,
+  gradient,
+  radius,
+  size,
+  weight
+} from '@/styles/variables'
 import { ArrowRightIcon } from '@/components/Icon'
 import Img from '@/components/Image'
 
@@ -19,14 +27,12 @@ const HoverCard = styled(Link)`
   display: flex;
   justify-content: space-between;
   flex-direction: column;
-  color: #212121;
-  box-shadow: 0px 4px 4px rgba(124, 255, 247, 0.25);
+  color: ${baseColor.onPrimary};
   border: 1px solid transparent;
   background-clip: padding-box, border-box;
   background-origin: padding-box, border-box;
-  background-image: linear-gradient(to right, #fff, #fff),
-    linear-gradient(270deg, #a8fbff, #81c2ff, #f9d0fa);
-
+  background-image: ${gradient.card};
+  box-shadow: 0px 4px 4px ${color.cardShadow};
   will-change: transform, background-image, box-shadow;
   transition: transform 0.25s ease-in-out, background-image 1s ease-in-out;
 
@@ -40,9 +46,8 @@ const HoverCard = styled(Link)`
 
   :hover {
     transform: scale(1.1);
-    background-image: linear-gradient(to right, #fff, #fff),
-      linear-gradient(270deg, #12d6df, #db12df);
-    box-shadow: 0px 4px 4px rgba(153, 117, 255, 0.25);
+    background-image: ${gradient.cardHover};
+    box-shadow: 0px 4px 4px ${color.cardHoverShadow};
   }
 `
 
@@ -54,7 +59,7 @@ const CardTitle = styled.h3`
 const Details = styled.span`
   font-size: ${size.sm};
   width: 100%;
-  font-weight: 600;
+  font-weight: ${weight.semiBold};
   margin-bottom: 9px;
 `
 
@@ -62,7 +67,7 @@ const Card: FC<CardProps> = ({ to, item, id }) => {
   const { projectDetail } = item
   const { logoURI, name } = projectDetail || {}
   return (
-    <HoverCard to={`${to}?url=${id}`}>
+    <HoverCard to={`${to}?url=${encodeURIComponent(id)}`}>
       <Img src={logoURI} alt={name} />
       <CardTitle>{name}</CardTitle>
       <Details>Details</Details>

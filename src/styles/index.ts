@@ -1,5 +1,5 @@
 import { createGlobalStyle } from 'styled-components'
-import { size } from './variables'
+import { size, weight } from './variables'
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -31,7 +31,7 @@ const GlobalStyle = createGlobalStyle`
   h3,
   h4 {
     margin: 0;
-    font-weight: 700;
+    font-weight: ${weight.Bold};
   }
 
   button {

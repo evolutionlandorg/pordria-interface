@@ -1,4 +1,4 @@
-import { computeSize, size } from '@/styles/variables'
+import { baseColor, computeSize, size, weight } from '@/styles/variables'
 import React from 'react'
 import styled from 'styled-components'
 
@@ -24,7 +24,7 @@ const Title = styled.h1`
   font-size: ${size.h1};
   line-height: ${computeSize(64)};
   letter-spacing: 0.002em;
-  color: #1f1f1f;
+  color: ${baseColor.darkBlack};
   margin: 0;
   max-width: 100%;
 
@@ -37,8 +37,8 @@ const Description = styled.span`
   font-size: ${size.lg};
   line-height: 150%;
   max-width: 100%;
-  font-weight: 600;
-  color: #212121;
+  font-weight: ${weight.semiBold};
+  color: ${baseColor.onPrimary};
 `
 
 function Intro() {

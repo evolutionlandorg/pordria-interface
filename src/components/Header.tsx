@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 import { CONTACT_US, GITHUB_INDEX, INDEX } from '@/config/routers'
-import { computeSize, size } from '@/styles/variables'
+import { baseColor, color, computeSize, size } from '@/styles/variables'
 import Button from '@/components/Button'
 import { GithubIcon, LogoIcon } from '@/components/Icon'
 
@@ -19,11 +19,11 @@ const HeaderRoot = styled.header`
   top: 0;
   backdrop-filter: blur(20px);
   z-index: 999;
-  background-color: rgba(255, 255, 255, 0.01);
-  border-bottom: 1px solid #cfcceb;
+  background-color: ${color.headerBgFilter};
+  border-bottom: 1px solid ${color.headerBorder};
 
   a {
-    color: #212121;
+    color: ${baseColor.onPrimary};
     font-size: ${sm};
   }
 `
@@ -31,7 +31,7 @@ const Title = styled.h2`
   display: flex;
   align-items: center;
   font-size: ${lg};
-  color: #212121;
+  color: ${baseColor.onPrimary};
 `
 
 const Nav = styled.nav`

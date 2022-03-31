@@ -3,32 +3,30 @@ import styled from 'styled-components'
 import Search from '@/components/Search'
 import { IEventItem } from '@/hooks/useFetchEventList'
 import { Index } from 'flexsearch'
-import EventItem from './EventItem'
+import { baseColor, computeSize } from '@/styles/variables'
+import useAuth from '@/hooks/useAuth'
+import EventItem, { ItemContainer } from './EventItem'
 import Wallet from './Wallet'
 
 const OptBar = styled.div`
-  display: grid;
+  display: flex;
   margin-bottom: 2rem;
-  grid-template-columns: 1fr 188px;
-  grid-gap: 1rem;
+  gap: ${computeSize(30)};
+`
+
+const OptSearch = styled(Search)`
+  flex: 1;
 `
 
 const StyledResults = styled.div`
   padding: 3rem 0;
 `
-const ListTitle = styled.div`
-  font-weight: 500;
-  color: rgba(0, 0, 0, 0.3);
-  display: grid;
-  grid-gap: 1rem;
-  grid-template-columns: 128px 96px 96px 1fr 96px;
-  margin-bottom: 1rem;
-  @media screen and (max-width: 414px) {
-    display: none;
-  }
+const ListTitle = styled(ItemContainer)`
+  color: ${baseColor.secondary};
+  margin-bottom: ${computeSize(20)};
 `
 
-const Opt = styled.p`
+const Opt = styled.span`
   text-align: right;
 `
 interface IEventResultsProps {
@@ -38,6 +36,8 @@ interface IEventResultsProps {
 
 const EventResults: FC<IEventResultsProps> = ({ list = [], chainID }) => {
   const [roots, setRoots] = useState<string[]>([])
+  const [searchFocused, setSearchFocused] = useState(false)
+  const { account } = useAuth()
   const [user, setUser] = useState('')
   const indexSearch = useMemo(() => {
     const index = new Index({ tokenize: 'full' })
@@ -49,13 +49,20 @@ const EventResults: FC<IEventResultsProps> = ({ list = [], chainID }) => {
 
     return index
   }, [list])
+  const searchValue = useMemo(() => {
+    if (searchFocused || user) {
+      return user
+    }
+
+    return account || ''
+  }, [user, account, searchFocused])
 
   const renderEvents = () =>
     list
       .map(item => {
         const { root } = item
         if (roots.length <= 0 || roots.includes(root)) {
-          return <EventItem key={root} item={item} user={user} />
+          return <EventItem key={root} item={item} user={searchValue} />
         }
         return null
       })
@@ -69,14 +76,19 @@ const EventResults: FC<IEventResultsProps> = ({ list = [], chainID }) => {
   return (
     <StyledResults>
       <OptBar>
-        <Search onSearch={search} onChange={e => setUser(e.target.value)} />
+        <OptSearch
+          onSearch={search}
+          onFocus={() => setSearchFocused(true)}
+          onBlur={() => setSearchFocused(false)}
+          onChange={e => setUser(e.target.value)}
+          value={searchValue}
+        />
         <Wallet chainID={chainID} />
       </OptBar>
       <ListTitle>
-        <p>Event ID</p>
-        <p>Start Time</p>
-        <p>End Time</p>
-        <p>Detail</p>
+        <span>Event ID</span>
+        <span>End Time</span>
+        <span>Detail</span>
         <Opt>Operation</Opt>
       </ListTitle>
       {renderEvents()}
