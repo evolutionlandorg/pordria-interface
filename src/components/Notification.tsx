@@ -41,12 +41,12 @@ const X = styled(XIcon)`
 `
 const CheckCircleFill = styled(CheckCircleFillIcon)`
   ${icon}
-  fill: ${color.checkCircle};
+  fill: ${color.success};
 `
 
 const XCircleFill = styled(XCircleFillIcon)`
   ${icon}
-  fill: ${color.XCircle};
+  fill: ${color.error};
 `
 
 const Text = styled.span`

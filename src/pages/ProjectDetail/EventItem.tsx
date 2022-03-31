@@ -1,5 +1,5 @@
 import { IEventItem } from '@/hooks/useFetchEventList'
-import React, { FC, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import networkMap from '@/config/network'
 import { BigNumber, Contract, providers } from 'ethers'
@@ -7,6 +7,7 @@ import claimsABI from '@/config/network/claims.abi.json'
 import toast from 'react-hot-toast'
 import Button from '@/components/Button'
 import { baseColor, computeSize, size, weight } from '@/styles/variables'
+import useAuth from '@/hooks/useAuth'
 
 export const ItemContainer = styled.div`
   display: grid;
@@ -41,13 +42,15 @@ const Opts = styled.div`
 interface IEventItemProps {
   item: IEventItem
   user: string
+  claimable?: boolean
 }
 
 const MAX_TIME = 2 ** 32 - 1
 
-const EventItem: FC<IEventItemProps> = ({ item, user }) => {
+const EventItem = ({ item, user, claimable = false }: IEventItemProps) => {
   const { name, detail, proofURI, chainId, address, claims, root } = item
   const { rpcUrls } = networkMap[chainId]
+  const { account } = useAuth()
 
   const [endTimestamp, setEndTimestamp] = useState<number | null>()
 
@@ -96,6 +99,10 @@ const EventItem: FC<IEventItemProps> = ({ item, user }) => {
 
   const claim = async () => {
     try {
+      if (!account) {
+        throw new Error('Please connect wallet first')
+      }
+
       if (!root || !claims) {
         throw new Error('Data loading...')
       }
@@ -160,7 +167,7 @@ const EventItem: FC<IEventItemProps> = ({ item, user }) => {
       <span>{formateDate()}</span>
       <span>{detail}</span>
       <Opts>
-        <Button onClick={claim} width="100%">
+        <Button onClick={claim} width="100%" disabled={!claimable}>
           Claim
         </Button>
         <Button onClick={openProof} width="100%">
@@ -169,6 +176,10 @@ const EventItem: FC<IEventItemProps> = ({ item, user }) => {
       </Opts>
     </ItemContainer>
   )
+}
+
+EventItem.defaultProps = {
+  claimable: false
 }
 
 export default EventItem

@@ -67,7 +67,7 @@ const Card: FC<CardProps> = ({ to, item, id }) => {
   const { projectDetail } = item
   const { logoURI, name } = projectDetail || {}
   return (
-    <HoverCard to={`${to}?url=${encodeURIComponent(id)}`}>
+    <HoverCard to={`${to}?url=${id}`}>
       <Img src={logoURI} alt={name} />
       <CardTitle>{name}</CardTitle>
       <Details>Details</Details>

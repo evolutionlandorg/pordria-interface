@@ -8,3 +8,5 @@ export { ReactComponent as LoadingIcon } from '@/components/Icon/svg/LoadingIcon
 export { ReactComponent as CheckCircleFillIcon } from '@/components/Icon/svg/CheckCircleFillIcon.svg'
 export { ReactComponent as XCircleFillIcon } from '@/components/Icon/svg/XCircleFillIcon.svg'
 export { ReactComponent as XIcon } from '@/components/Icon/svg/XIcon.svg'
+export { ReactComponent as CheckIcon } from '@/components/Icon/svg/CheckIcon.svg'
+export { ReactComponent as CopyIcon } from '@/components/Icon/svg/CopyIcon.svg'

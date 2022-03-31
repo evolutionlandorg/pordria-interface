@@ -15,6 +15,7 @@ interface IStyledButtonProps {
 }
 interface IButtonProps extends IStyledButtonProps {
   onClick?: MouseEventHandler<HTMLButtonElement> | undefined
+  disabled?: boolean
 }
 
 const StyledButton = styled.button<IStyledButtonProps>`
@@ -37,9 +38,15 @@ const StyledButton = styled.button<IStyledButtonProps>`
   font-weight: ${weight.semiBold};
   width: ${({ width }) => width};
 
-  :hover {
+  :not(:disabled):hover {
     border-color: ${baseColor.darkBlack};
     background-color: ${color.buttonHover};
+  }
+
+  :disabled {
+    color: ${baseColor.secondary};
+    border-color: currentColor;
+    cursor: not-allowed;
   }
 
   :not(:last-of-type) {
@@ -67,7 +74,8 @@ const Button: FC<IButtonProps> = ({ onClick, children, ...styleProps }) => (
 Button.defaultProps = {
   onClick: undefined,
   width: 'fit-content',
-  large: false
+  large: false,
+  disabled: false
 }
 
 export default Button

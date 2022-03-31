@@ -1,9 +1,8 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import styled from 'styled-components'
 import Search from '@/components/Search'
 import { IEventItem } from '@/hooks/useFetchEventList'
 import { baseColor, computeSize, size, weight } from '@/styles/variables'
-import useAuth from '@/hooks/useAuth'
 import Fuse from 'fuse.js'
 import EventItem, { ItemContainer } from './EventItem'
 import Wallet from './Wallet'
@@ -16,6 +15,7 @@ const OptBar = styled.div`
 
 const OptContent = styled.div`
   display: flex;
+  align-items: center;
   gap: ${computeSize(30)};
 `
 
@@ -47,8 +47,7 @@ interface IEventResultsProps {
 }
 
 const EventResults = ({ list = [], chainID }: IEventResultsProps) => {
-  const [roots, setRoots] = useState<IEventItem[]>([])
-  const { account } = useAuth()
+  const [roots, setRoots] = useState<string[]>([])
   const [user, setUser] = useState('')
   const [searchValue, setSearchValue] = useState('')
   const fuse = useMemo(
@@ -60,27 +59,24 @@ const EventResults = ({ list = [], chainID }: IEventResultsProps) => {
     [list]
   )
 
-  const search = useCallback(
-    (value: string) => {
-      const searchResult = fuse.search(value)
-      setUser(value)
+  const search = (value: string) => {
+    const searchResult = fuse.search(value)
+    setUser(value)
 
-      setRoots(searchResult.map(({ item }) => item))
-    },
-    [setUser, setRoots, fuse]
-  )
-
-  useEffect(() => {
-    if (account) {
-      setSearchValue(account)
-      search(account)
-    }
-  }, [account, search])
+    setRoots(searchResult.map(({ item }) => item.root))
+  }
 
   const renderEvents = () =>
-    (user ? roots : list).map(item => {
+    list.map(item => {
       const { root } = item
-      return <EventItem key={root} item={item} user={user} />
+      return (
+        <EventItem
+          key={root}
+          item={item}
+          user={user}
+          claimable={roots.includes(root)}
+        />
+      )
     })
 
   return (
@@ -96,8 +92,8 @@ const EventResults = ({ list = [], chainID }: IEventResultsProps) => {
         </OptContent>
         <OptSearchTips>
           {user
-            ? `Searching: ${user}`
-            : 'click search button to start searching'}
+            ? `You are claiming for: ${user}`
+            : 'Enter an address to find available airdrops and claim for this address.'}
         </OptSearchTips>
       </OptBar>
       <ListTitle>

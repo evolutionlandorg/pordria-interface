@@ -54,8 +54,8 @@ export const baseColor = {
 export const color = {
   backdrop: rgba(baseColor.black, 0.5),
   buttonHover: rgba(baseColor.darkBlack, 0.1),
-  checkCircle: baseColor.green,
-  XCircle: baseColor.red,
+  success: baseColor.green,
+  error: baseColor.red,
   headerBorder: '#cfcceb',
   notificationBg: '#4d5880',
   headerBgFilter: rgba(baseColor.primaryLight, 0.01),

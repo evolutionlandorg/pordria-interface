@@ -46,7 +46,7 @@ function Intro() {
     <IntroContainer>
       <Title>An EVM Airdrop Aggregator</Title>
       <Description>
-        Pordria is an airdrop aggregator support ERC - 20 / ERC - 721/ ERC -
+        Pordria is an airdrop aggregator supporting ERC - 20, ERC - 721, ERC -
         1155 assets to be airdropped on Ethereum, Polygon, Heco, and Crab.
       </Description>
     </IntroContainer>

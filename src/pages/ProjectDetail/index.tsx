@@ -36,7 +36,7 @@ function ProjectDetail() {
           [k]: v
         }
       }, {})
-    setProjectsID([decodeURIComponent(search.url)])
+    setProjectsID([search.url])
   }, [location])
 
   const { description, chainID, result } = useMemo(() => {

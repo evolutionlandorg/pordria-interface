@@ -1,7 +1,6 @@
 import React, { ChangeEventHandler } from 'react'
 import styled from 'styled-components'
 import { baseColor, computeSize, radius, size } from '@/styles/variables'
-import { SearchIcon } from '@/components/Icon'
 
 const StyledSearch = styled.form`
   display: flex;
@@ -18,7 +17,8 @@ const StyledInput = styled.input`
   padding: 8px;
   width: 100%;
   padding-left: 1rem;
-  padding-right: 2rem;
+  line-height: 1;
+  padding-right: ${computeSize(70)};
   border-radius: ${radius.md};
   outline: none;
 
@@ -64,12 +64,12 @@ const Search = ({ onChange, onSearch, className, value }: ISearchProps) => (
   >
     <StyledInput
       type="search"
-      placeholder="Search by address"
+      placeholder="Enter the address you will claim for"
       onChange={onChange}
       value={value}
     />
     <StyledButton type="button" onClick={() => onSearch(value)}>
-      <SearchIcon />
+      confirm
     </StyledButton>
   </StyledSearch>
 )
