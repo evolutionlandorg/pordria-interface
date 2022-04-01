@@ -26,9 +26,7 @@ export default function useProjects() {
       } catch (error) {
         res = {}
       }
-      const cooperator = await fetchData<IProjects>(PROJECTS, {
-        mode: 'no-cors'
-      })
+      const cooperator = await fetchData<IProjects>(PROJECTS)
       res = {
         ...res,
         ...cooperator
