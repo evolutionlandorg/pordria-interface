@@ -1,7 +1,4 @@
 # Pordria
-[1]: https://pordria.evolution.land
-[2]: https://pordria.evolution.land/event-list-schema.json
-
 Pordria is an airdrop aggregator supporting ERC - 20, ERC - 721, ERC - 1155 assets to be airdropped on Ethereum, Polygon, Heco, and Crab.
 
 ## How it works
@@ -15,14 +12,14 @@ This is a permissionless airdrop protocol, which can be used by both projects an
 #### JSON Schema
 The JSON schema ID is https://pordria.evolution.land/event-list-schema.json
 
-**Before submit your project details, please check [event list json schema](2) to follow the JSON specification.**
+**Before submit your project details, please check [event list json schema](https://pordria.evolution.land/event-list-schema.json) to follow the JSON specification.**
 
 As long as the JSON specification is followed properly, please submit an issue via [this link](https://github.com/evolutionlandorg/pordria-interface/issues/new?assignees=&labels=add-project-request&template=add-project-request.md&title=Request%3A+add+%7BProject+name%7D).
 
 ### As a user
 #### Find the project of event or airdrop
 
-If the event or the airdrop is **from our cooperators**, please check it on [Pordria Homepage](1).
+If the event or the airdrop is **from our cooperators**, please check it on [Pordria Homepage](https://pordria.evolution.land).
 
 If you **cannot** find the event or airdrop on our website, please check the bottom of the website, then input a url which returns a result following the structure below
 ```json
@@ -37,7 +34,7 @@ If you **cannot** find the event or airdrop on our website, please check the bot
 
 |  params  |  description  |
 | :------: | :----: |
-|  [url]   | the url of a json file and the json file should follow this [json schema](2) |
+|  [url]   | the url of a json file and the json file should follow this [json schema](https://pordria.evolution.land/event-list-schema.json) |
 |   name   |  project name  |
 | homepage |  the official website url of the project manager   |
 
