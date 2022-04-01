@@ -1,1 +1,6 @@
-{}
+{
+  "https://raw.githubusercontent.com/evolutionlandorg/claims/main/data/pordria/project.json": {
+    "name": "Evolution Land",
+    "homepage": "https://www.evolution.land/"
+  }
+}
