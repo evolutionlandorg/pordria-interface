@@ -20,11 +20,11 @@ const useFetch = () => {
   const [isLoading, setStatus] = useState(true)
 
   const fetchData = useCallback(
-    async <T>(url: string): Promise<T | undefined> => {
+    async <T>(url: RequestInfo, init?: RequestInit): Promise<T | undefined> => {
       setStatus(true)
       let res
       try {
-        const response = await fetch(url)
+        const response = await fetch(url, init)
         const { ok, status, statusText } = response
         if (!ok) {
           throw new FetchError({
@@ -34,8 +34,9 @@ const useFetch = () => {
         }
         res = await response.json()
       } catch (e) {
+        // TODO: add fetch error statusText
         if (e instanceof Error) {
-          toast.error(e.message)
+          toast.error(e.message || 'Error')
         }
       }
 
