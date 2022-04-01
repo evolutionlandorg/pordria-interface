@@ -5,7 +5,7 @@ Pordria is an airdrop aggregator supporting ERC - 20, ERC - 721, ERC - 1155 asse
 
 This is a permissionless airdrop protocol, which can be used by both projects and individuals to send users airdrops of various assets simply and quickly. It uses the Merkle tree to ensure that airdrops are accurately and safely claimed by users, and saves gas for projects.
 
-## Usage
+## Guide
 
 ### As a cooperator
 
