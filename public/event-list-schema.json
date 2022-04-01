@@ -1,8 +1,7 @@
 {
-  "title": "The root schema",
-  "description": "The root schema comprises the entire JSON document.",
+  "title": "JSON schema for Pordria project detail",
   "$schema": "http://json-schema.org/draft-04/schema",
-  "id": "http://example.com/example.json",
+  "id": "https://pordria.evolution.land/event-list-schema.json",
   "type": "object",
   "required": [
     "name",
@@ -14,58 +13,61 @@
   "properties": {
     "name": {
       "type": "string",
-      "title": "The name schema",
-      "description": "An explanation about the purpose of this instance."
+      "description": "The token of the project."
     },
     "timestamp": {
       "type": "string",
-      "title": "The timestamp schema",
-      "description": "An explanation about the purpose of this instance."
+      "format": "date-time",
+      "description": "The timestamp of the project version, which means when this immutable project was created"
     },
     "version": {
       "type": "object",
-      "title": "The version schema",
-      "description": "An explanation about the purpose of this instance.",
+      "description": "The version of the project to indicate change",
       "required": [
         "major",
         "minor",
         "patch"
       ],
+      "examples": [
+        {
+          "major": 1,
+          "minor": 0,
+          "patch": 0
+        }
+      ],
       "properties": {
         "major": {
           "type": "integer",
-          "title": "The major schema",
-          "description": "An explanation about the purpose of this instance."
+          "description": "The major version of the project. When event  addresses are changed or removed from the list, the increment must be performed.",
+          "minimum": 0
         },
         "minor": {
           "type": "integer",
-          "title": "The minor schema",
-          "description": "An explanation about the purpose of this instance."
+          "description": "The minor version of the project. When events are added to the list, the increment must be performed.",
+          "minimum": 0
         },
         "patch": {
           "type": "integer",
-          "title": "The patch schema",
-          "description": "An explanation about the purpose of this instance."
+          "description": "The patch version of the project. When any changes applied to the list, the increment must be performed.",
+          "minimum": 0
         }
       },
-      "additionalProperties": true
+      "additionalProperties": false
     },
     "logoURI": {
       "type": "string",
-      "title": "The logoURI schema",
-      "description": "An explanation about the purpose of this instance."
+      "description": "The project logo URI, suggest SVG or PNG of size 64x64."
     },
     "events": {
       "type": "array",
-      "title": "The events schema",
-      "description": "An explanation about the purpose of this instance.",
+      "description": "The events listed on the list.",
       "additionalItems": true,
+      "uniqueItems": true,
       "items": {
         "anyOf": [
           {
             "type": "object",
-            "title": "The first anyOf schema",
-            "description": "An explanation about the purpose of this instance.",
+            "description": "Metadata for a single event in a event list.",
             "required": [
               "chainId",
               "address",
@@ -77,36 +79,33 @@
             "properties": {
               "chainId": {
                 "type": "integer",
-                "title": "The chainId schema",
-                "description": "An explanation about the purpose of this instance."
+                "description": "The chain ID of the Ethereum network where this event is deployed"
               },
               "address": {
                 "type": "string",
-                "title": "The address schema",
-                "description": "An explanation about the purpose of this instance."
+                "description": "The airdrop contract address on the specified chain ID."
               },
               "name": {
                 "type": "string",
-                "title": "The name schema",
-                "description": "An explanation about the purpose of this instance."
+                "description": "The name of the event."
               },
               "detail": {
                 "type": "string",
-                "title": "The detail schema",
-                "description": "An explanation about the purpose of this instance."
+                "description": "A description of the event."
               },
               "logoURI": {
                 "type": "string",
-                "title": "The logoURI schema",
-                "description": "An explanation about the purpose of this instance."
+                "description": "A URI to the event logo asset; suggest in SVG or PNG of size 64x64."
               },
               "proofURI": {
                 "type": "string",
-                "title": "The proofURI schema",
-                "description": "An explanation about the purpose of this instance."
+                "description": "follow this example: https://pordria.evolution.land/proof-url-example.json",
+                "examples": [
+                    "https://pordria.evolution.land/proof-url-example.json"
+                ]
               }
             },
-            "additionalProperties": true
+            "additionalProperties": false
           }
         ]
       }
