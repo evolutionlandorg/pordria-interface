@@ -1,0 +1,115 @@
+{
+  "title": "JSON schema for Pordria project detail",
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "id": "https://pordria.evolution.land/event-list-schema.json",
+  "type": "object",
+  "required": [
+    "name",
+    "timestamp",
+    "version",
+    "logoURI",
+    "events"
+  ],
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "The token of the project."
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "The timestamp of the project version, which means when this immutable project was created"
+    },
+    "version": {
+      "type": "object",
+      "description": "The version of the project to indicate change",
+      "required": [
+        "major",
+        "minor",
+        "patch"
+      ],
+      "examples": [
+        {
+          "major": 1,
+          "minor": 0,
+          "patch": 0
+        }
+      ],
+      "properties": {
+        "major": {
+          "type": "integer",
+          "description": "The major version of the project. When event  addresses are changed or removed from the list, the increment must be performed.",
+          "minimum": 0
+        },
+        "minor": {
+          "type": "integer",
+          "description": "The minor version of the project. When events are added to the list, the increment must be performed.",
+          "minimum": 0
+        },
+        "patch": {
+          "type": "integer",
+          "description": "The patch version of the project. When any changes applied to the list, the increment must be performed.",
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false
+    },
+    "logoURI": {
+      "type": "string",
+      "description": "The project logo URI, suggest SVG or PNG of size 64x64."
+    },
+    "events": {
+      "type": "array",
+      "description": "The events listed on the list.",
+      "additionalItems": true,
+      "uniqueItems": true,
+      "items": {
+        "anyOf": [
+          {
+            "type": "object",
+            "description": "Metadata for a single event in a event list.",
+            "required": [
+              "chainId",
+              "address",
+              "name",
+              "detail",
+              "logoURI",
+              "proofURI"
+            ],
+            "properties": {
+              "chainId": {
+                "type": "integer",
+                "description": "The chain ID of the Ethereum network where this event is deployed"
+              },
+              "address": {
+                "type": "string",
+                "description": "The airdrop contract address on the specified chain ID."
+              },
+              "name": {
+                "type": "string",
+                "description": "The name of the event."
+              },
+              "detail": {
+                "type": "string",
+                "description": "A description of the event."
+              },
+              "logoURI": {
+                "type": "string",
+                "description": "A URI to the event logo asset; suggest in SVG or PNG of size 64x64."
+              },
+              "proofURI": {
+                "type": "string",
+                "description": "follow this example: https://pordria.evolution.land/proof-url-example.json",
+                "examples": [
+                    "https://pordria.evolution.land/proof-url-example.json"
+                ]
+              }
+            },
+            "additionalProperties": false
+          }
+        ]
+      }
+    }
+  },
+  "additionalProperties": true
+}

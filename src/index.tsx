@@ -1,13 +1,39 @@
-import React from 'react'
+import React, { StrictMode, Suspense } from 'react'
 import ReactDOM from 'react-dom'
-import './index.css'
-import App from '@/App'
-import reportWebVitals from './reportWebVitals'
+import { Routes, Route, BrowserRouter, Navigate } from 'react-router-dom'
+
+import Main from '@/main'
+import Home from '@/pages/Home'
+import { PROJECT_DETAIL, INDEX, NO_MATCH } from '@/config/routers'
+import reportWebVitals from '@/reportWebVitals'
+import Loading from '@/components/Loading'
+import Provider from '@/Provider'
+import GlobalStyle from '@/styles'
+
+const ProjectDetail = React.lazy(() => import('@/pages/ProjectDetail'))
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+  <StrictMode>
+    <GlobalStyle />
+    <Provider>
+      <BrowserRouter>
+        <Routes>
+          <Route path={INDEX} element={<Main />}>
+            <Route index element={<Home />} />
+            <Route
+              path={PROJECT_DETAIL}
+              element={
+                <Suspense fallback={<Loading />}>
+                  <ProjectDetail />
+                </Suspense>
+              }
+            />
+            <Route path={NO_MATCH} element={<Navigate to={INDEX} replace />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </Provider>
+  </StrictMode>,
   document.getElementById('root')
 )
 
