@@ -12,7 +12,7 @@ const StyledAllLists = styled.section`
   min-height: 80vh;
   height: fit-content;
   width: 100%;
-  padding: ${computeSize(70)} 0 ${computeSize(84)} 0;
+  padding-bottom: ${computeSize(84)};
   display: grid;
   gap: 24px;
   flex-direction: column;
@@ -26,7 +26,7 @@ const StyledAllLists = styled.section`
 `
 
 const CardWrapper = styled.div`
-  padding-bottom: ${computeSize(75)};
+  padding: ${computeSize(70)} 0 ${computeSize(75)};
   display: grid;
   flex-wrap: wrap;
   justify-content: flex-start;
