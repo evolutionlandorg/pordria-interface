@@ -20,6 +20,8 @@ export const ItemContainer = styled.div`
   font-size: ${size.sm};
   font-weight: ${weight.semiBold};
   color: ${baseColor.onPrimary};
+  word-break: break-all;
+  white-space: pre-wrap;
 
   @media screen and (max-width: 414px) {
     span {
