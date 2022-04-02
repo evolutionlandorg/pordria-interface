@@ -1,7 +1,7 @@
 import { LocalKeyEnum } from '@/config/db'
 import { useEffect, useState } from 'react'
 import useFetch from '@/hooks/useFetch'
-import { PROJECTS } from '@/config/routers'
+import DefaultProjects from '@/config/projects.json'
 
 interface IProjects {
   [key: string]: {
@@ -18,7 +18,7 @@ export default function useProjects() {
   const [projects, setProjects] = useState<IProjects>({})
 
   useEffect(() => {
-    const initProjects = async () => {
+    const initProjects = () => {
       const cache = localStorage.getItem(LocalKeyEnum.AIRDROP_PROJECTS) || ''
       let res
       try {
@@ -26,10 +26,10 @@ export default function useProjects() {
       } catch (error) {
         res = {}
       }
-      const cooperator = await fetchData<IProjects>(PROJECTS)
+
       res = {
         ...res,
-        ...cooperator
+        ...DefaultProjects
       }
       setProjectIDPartialList(Object.keys(res))
       setProjects(res)
