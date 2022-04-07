@@ -28,10 +28,10 @@ const StyledButton = styled.button<IStyledButtonProps>`
   border: 1px solid ${baseColor.secondary};
   padding: ${({ large }) => {
     if (large) {
-      return `${computeSize(8)} ${computeSize(40)}`
+      return `${computeSize(6)} ${computeSize(40)}`
     }
 
-    return computeSize(8)
+    return `${computeSize(6)} ${computeSize(8)}`
   }};
   border-radius: ${radius.md};
   box-sizing: border-box;

@@ -30,12 +30,12 @@ const StyledInput = styled.input`
 const StyledButton = styled.button`
   display: inline-flex;
   align-items: center;
-  box-sizing: content-box;
   height: 100%;
   min-width: ${size.tn};
   position: absolute;
   right: 0;
   padding: 0 ${computeSize(8)};
+  font-size: ${size.sm};
 
   ::before {
     content: '';

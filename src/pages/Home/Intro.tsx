@@ -1,6 +1,7 @@
 import { baseColor, computeSize, size, weight } from '@/styles/variables'
 import React from 'react'
 import styled from 'styled-components'
+import { Heading } from '@chakra-ui/react'
 
 const IntroContainer = styled.section`
   display: flex;
@@ -19,20 +20,6 @@ const IntroContainer = styled.section`
   }
 `
 
-const Title = styled.h1`
-  text-align: left;
-  font-size: ${size.h1};
-  line-height: ${computeSize(64)};
-  letter-spacing: 0.002em;
-  color: ${baseColor.darkBlack};
-  margin: 0;
-  max-width: 100%;
-
-  @media screen and (max-width: 960px) {
-    font-size: 2.1875rem;
-  }
-`
-
 const Description = styled.span`
   font-size: ${size.lg};
   line-height: 150%;
@@ -44,7 +31,7 @@ const Description = styled.span`
 function Intro() {
   return (
     <IntroContainer>
-      <Title>An EVM Airdrop Aggregator</Title>
+      <Heading size="2xl">An EVM Airdrop Aggregator</Heading>
       <Description>
         Pordria is an airdrop aggregator supporting ERC - 20, ERC - 721, ERC -
         1155 assets to be airdropped on Ethereum, Polygon, Heco, and Crab.

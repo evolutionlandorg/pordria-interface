@@ -23,7 +23,7 @@ const HoverCard = styled(Link)`
   cursor: pointer;
   border-radius: ${radius.lg};
   padding: ${computeSize(30)} ${computeSize(20)};
-  max-width: ${computeSize(138)};
+  max-width: ${computeSize(178)};
   display: flex;
   justify-content: space-between;
   flex-direction: column;

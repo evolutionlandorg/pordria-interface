@@ -32,6 +32,7 @@ const Title = styled.h2`
   align-items: center;
   font-size: ${lg};
   color: ${baseColor.onPrimary};
+  font-weight: 700;
 `
 
 const Nav = styled.nav`
