@@ -29,7 +29,7 @@ const networkMap: INetworkMap = {
     chainId: '0x1',
     blockExplorerUrls: ['https://etherscan.io/'],
     chainName: 'Ethereum Network',
-    iconUrls: [],
+    iconUrls: [''],
     nativeCurrency: {
       name: 'Ethereum Network Token',
       symbol: 'ETH',
@@ -37,13 +37,23 @@ const networkMap: INetworkMap = {
     },
     rpcUrls: ['https://ropsten.infura.io/v3/616e88b770be403a8be78c4b545a5298']
   },
+  [ChainIDEnum.POLYGON]: {
+    chainId: '0x89',
+    blockExplorerUrls: ['https://polygonscan.com/'],
+    chainName: 'Polygon Chain',
+    iconUrls: ['https://portal.evolution.land/images/token/matic.svg'],
+    nativeCurrency: {
+      name: 'Polygon Chain Token',
+      symbol: 'MATIC',
+      decimals: 18
+    },
+    rpcUrls: ['https://polygon-rpc.com']
+  },
   [ChainIDEnum.MUMBAI]: {
     chainId: '0x13881',
     blockExplorerUrls: ['https://mumbai.polygonscan.com'],
     chainName: 'Mumbai Testnet',
-    iconUrls: [
-      'https://alphaevolution.l2me.com/assets/chain/polygon/matic.png'
-    ],
+    iconUrls: ['https://portal.evolution.land/images/token/matic.svg'],
     nativeCurrency: {
       name: 'test Matic',
       symbol: 'Matic',
@@ -55,9 +65,7 @@ const networkMap: INetworkMap = {
     chainId: '0x80',
     blockExplorerUrls: ['https://hecoinfo.com/'],
     chainName: 'Heco Chain',
-    iconUrls: [
-      'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x6f259637dcD74C767781E37Bc6133cd6A68aa161/logo.png'
-    ],
+    iconUrls: ['https://portal.evolution.land/images/token/ht.svg'],
     nativeCurrency: {
       name: 'Huobi ECO Chain Token',
       symbol: 'HT',
@@ -69,9 +77,7 @@ const networkMap: INetworkMap = {
     chainId: '0x100',
     blockExplorerUrls: ['https://testnet.hecoinfo.com/'],
     chainName: 'Heco Testnet',
-    iconUrls: [
-      'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x6f259637dcD74C767781E37Bc6133cd6A68aa161/logo.png'
-    ],
+    iconUrls: ['https://portal.evolution.land/images/token/ht.svg'],
     nativeCurrency: {
       name: 'Huobi ECO Chain Token',
       symbol: 'HT',
@@ -79,25 +85,11 @@ const networkMap: INetworkMap = {
     },
     rpcUrls: ['https://http-testnet.hecochain.com']
   },
-  [ChainIDEnum.POLYGON]: {
-    chainId: '0x89',
-    blockExplorerUrls: ['https://polygonscan.com/'],
-    chainName: 'Polygon Chain',
-    iconUrls: [
-      'https://alphaevolution.l2me.com/assets/chain/polygon/matic.png'
-    ],
-    nativeCurrency: {
-      name: 'Polygon Chain Token',
-      symbol: 'MATIC',
-      decimals: 18
-    },
-    rpcUrls: ['https://polygon-rpc.com']
-  },
   [ChainIDEnum.CRAB]: {
     chainId: '0x2C',
     blockExplorerUrls: ['https://crab.subview.xyz/'],
-    chainName: 'Crab Network Chain',
-    iconUrls: [''],
+    chainName: 'Crab Smart Chain',
+    iconUrls: ['https://portal.evolution.land/images/token/crab.svg'],
     nativeCurrency: {
       name: 'Crab Network Native Token',
       symbol: 'CRAB',
