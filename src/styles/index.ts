@@ -1,26 +1,7 @@
 import { createGlobalStyle } from 'styled-components'
-import { size, weight } from './variables'
+import { weight } from './variables'
 
 const GlobalStyle = createGlobalStyle`
-  body {
-    font-size: ${size.base}px;
-    margin: 0;
-    font-family:
-      -apple-system,
-      BlinkMacSystemFont,
-      "Segoe UI",
-      Roboto,
-      Oxygen,
-      Ubuntu,
-      Cantarell,
-      "Fira Sans",
-      "Droid Sans",
-      "Helvetica Neue",
-      sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-
   a {
     text-decoration: none;
     word-break: break-word;
