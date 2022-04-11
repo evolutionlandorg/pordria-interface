@@ -18,3 +18,14 @@ interface IClaim {
   salt?: string
   proof: string[]
 }
+
+interface EventItem {
+  chainId: number
+  address: string
+  name: string
+  detail: string
+  logoURI: string
+  proofURI: string
+  claims: IClaim[]
+  root: string
+}

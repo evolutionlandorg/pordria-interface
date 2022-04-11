@@ -6,6 +6,10 @@ interface IFetchErrorConstructor {
   message: string
 }
 
+interface FetchInit extends RequestInit {
+  catchError?: (e: Error) => void
+}
+
 class FetchError extends Error {
   code: number
 
@@ -17,11 +21,13 @@ class FetchError extends Error {
 }
 
 const useFetch = () => {
-  const [isLoading, setStatus] = useState(true)
+  const [isLoading, setIsLoading] = useState(true)
+  const [isError, setIsError] = useState(false)
 
   const fetchData = useCallback(
-    async <T>(url: RequestInfo, init?: RequestInit): Promise<T | undefined> => {
-      setStatus(true)
+    async <T>(url: RequestInfo, init?: FetchInit): Promise<T | undefined> => {
+      setIsLoading(true)
+      setIsError(false)
       let res
       try {
         const response = await fetch(url, init)
@@ -36,17 +42,23 @@ const useFetch = () => {
       } catch (e) {
         // TODO: add fetch error statusText
         if (e instanceof Error) {
-          toast.error(e.message || 'Error')
+          const catchError = init?.catchError
+          if (catchError) {
+            catchError(e)
+          } else {
+            toast.error(e.message || 'Error')
+          }
         }
+        setIsError(true)
       }
 
-      setStatus(false)
+      setIsLoading(false)
       return res
     },
     []
   )
 
-  return { isLoading, fetchData }
+  return { isLoading, isError, fetchData }
 }
 
 export default useFetch
