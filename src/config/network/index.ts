@@ -3,6 +3,7 @@ export enum ChainIDEnum {
   CRAB = 44,
   POLYGON = 137,
   ETHEREUM = 1,
+  ROPSTEN = 3,
   HECO = 128,
   HECO_TEST = 256
 }
@@ -32,6 +33,18 @@ const networkMap: INetworkMap = {
     iconUrls: [''],
     nativeCurrency: {
       name: 'Ethereum Network Token',
+      symbol: 'ETH',
+      decimals: 18
+    },
+    rpcUrls: ['https://ropsten.infura.io/v3/616e88b770be403a8be78c4b545a5298']
+  },
+  [ChainIDEnum.ROPSTEN]: {
+    chainId: '0x3',
+    blockExplorerUrls: ['https://ropsten.etherscan.io/'],
+    chainName: 'Ethereum Ropsten Network',
+    iconUrls: [],
+    nativeCurrency: {
+      name: 'Ethereum Ropsten Network Token',
       symbol: 'ETH',
       decimals: 18
     },
