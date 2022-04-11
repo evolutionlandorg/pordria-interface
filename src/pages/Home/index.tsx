@@ -1,28 +1,19 @@
+import theme from '@/theme'
+import { SimpleGrid } from '@chakra-ui/react'
 import React from 'react'
-import styled from 'styled-components'
 import CardList from './CardList'
 import Intro from './Intro'
 
-const Main = styled.main`
-  display: grid;
-  grid-template-columns: 28.749rem 1fr;
-  grid-gap: 3rem;
-  box-sizing: border-box;
-  position: relative;
-
-  @media screen and (max-width: 960px) {
-    grid-template-columns: 1fr;
-    padding: 1rem;
-    width: 100%;
-  }
-`
-
 function Home() {
   return (
-    <Main>
+    <SimpleGrid
+      templateColumns={{ base: '1fr', lg: `${theme.sizes.md} 1fr` }}
+      spacing="12"
+      as="main"
+    >
       <Intro />
       <CardList />
-    </Main>
+    </SimpleGrid>
   )
 }
 

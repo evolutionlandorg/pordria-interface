@@ -1,5 +1,3 @@
-export { ReactComponent as PlusIcon } from '@/components/Icon/svg/PlusIcon.svg'
-export { ReactComponent as ArrowRightIcon } from '@/components/Icon/svg/ArrowRightIcon.svg'
 export { ReactComponent as ImgFallbackIcon } from '@/components/Icon/svg/ImgFallbackIcon.svg'
 export { ReactComponent as SearchIcon } from '@/components/Icon/svg/SearchIcon.svg'
 export { ReactComponent as LoadingIcon } from '@/components/Icon/svg/LoadingIcon.svg'
@@ -11,3 +9,5 @@ export { ReactComponent as CopyIcon } from '@/components/Icon/svg/CopyIcon.svg'
 
 export { default as LogoIcon } from '@/components/Icon/svg/LogoIcon'
 export { default as GithubIcon } from '@/components/Icon/svg/GithubIcon'
+export { default as ArrowRightIcon } from '@/components/Icon/svg/ArrowRightIcon'
+export { default as PlusIcon } from '@/components/Icon/svg/PlusIcon'

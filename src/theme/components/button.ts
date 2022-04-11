@@ -5,16 +5,18 @@ const Button: ComponentStyleConfig = {
     borderRadius: '1.25rem',
     color: 'white'
   },
-  sizes: {
-    md: {
-      fontSize: 'md',
-      px: 6,
-      py: 4
-    }
-  },
   variants: {
     github: {
       bgColor: 'black'
+    },
+    solid: {
+      bgGradient: 'linear(270deg, #A45CFF, #77F7FF)',
+      _hover: {
+        bgGradient: 'linear(270deg, #A45CFF, #77F7FF)'
+      },
+      _active: {
+        bgGradient: 'linear(270deg, #A45CFF, #77F7FF)'
+      }
     }
   },
   defaultProps: {

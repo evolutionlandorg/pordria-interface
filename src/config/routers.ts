@@ -6,3 +6,5 @@ export const GITHUB_INDEX =
 export const CONTACT_US = 'mailto:hello@evolution.land'
 export const PROJECTS =
   'https://raw.githubusercontent.com/evolutionlandorg/pordria-interface/main/projects.json'
+
+export const MAIN_BG_URL = '/bg.png'
