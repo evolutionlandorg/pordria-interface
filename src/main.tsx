@@ -6,12 +6,7 @@ import { Flex } from '@chakra-ui/react'
 
 function Layout() {
   return (
-    <Flex
-      direction="column"
-      align="center"
-      bgGradient="linear(285.42deg, gradient.main-start, gradient.main-end)"
-      minHeight="100vh"
-    >
+    <Flex direction="column" align="center" minHeight="100vh">
       <Header />
       <Outlet />
       <Notifications />

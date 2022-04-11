@@ -1,6 +1,4 @@
 export { ReactComponent as PlusIcon } from '@/components/Icon/svg/PlusIcon.svg'
-export { ReactComponent as GithubIcon } from '@/components/Icon/svg/GithubIcon.svg'
-export { ReactComponent as LogoIcon } from '@/components/Icon/svg/LogoIcon.svg'
 export { ReactComponent as ArrowRightIcon } from '@/components/Icon/svg/ArrowRightIcon.svg'
 export { ReactComponent as ImgFallbackIcon } from '@/components/Icon/svg/ImgFallbackIcon.svg'
 export { ReactComponent as SearchIcon } from '@/components/Icon/svg/SearchIcon.svg'
@@ -10,3 +8,6 @@ export { ReactComponent as XCircleFillIcon } from '@/components/Icon/svg/XCircle
 export { ReactComponent as XIcon } from '@/components/Icon/svg/XIcon.svg'
 export { ReactComponent as CheckIcon } from '@/components/Icon/svg/CheckIcon.svg'
 export { ReactComponent as CopyIcon } from '@/components/Icon/svg/CopyIcon.svg'
+
+export { default as LogoIcon } from '@/components/Icon/svg/LogoIcon'
+export { default as GithubIcon } from '@/components/Icon/svg/GithubIcon'

@@ -1,75 +1,46 @@
 import React from 'react'
-import styled from 'styled-components'
-import { Link } from 'react-router-dom'
+import { Link as ReactLink } from 'react-router-dom'
 import { CONTACT_US, GITHUB_INDEX, INDEX } from '@/config/routers'
-import { baseColor, color, computeSize, size } from '@/styles/variables'
-import Button from '@/components/Button'
 import { GithubIcon, LogoIcon } from '@/components/Icon'
+import {
+  Button,
+  CSSObject,
+  Flex,
+  Heading,
+  HStack,
+  Link,
+  LinkOverlay
+} from '@chakra-ui/react'
 
-const { sm, md, lg } = size
-
-const HeaderRoot = styled.header`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  box-sizing: border-box;
-  padding: ${computeSize(15)} ${computeSize(30)};
-  position: sticky;
-  top: 0;
-  backdrop-filter: blur(20px);
-  z-index: 999;
-  background-color: ${color.headerBgFilter};
-  border-bottom: 1px solid ${color.headerBorder};
-
-  a {
-    color: ${baseColor.onPrimary};
-    font-size: ${sm};
-  }
-`
-const Title = styled.h2`
-  display: flex;
-  align-items: center;
-  font-size: ${lg};
-  color: ${baseColor.onPrimary};
-  font-weight: 700;
-`
-
-const Nav = styled.nav`
-  display: inline-flex;
-  align-items: center;
-  gap: ${computeSize(30)};
-`
-
-const ButtonContent = styled.span`
-  margin-left: 6px;
-`
-
-const Github = styled(GithubIcon)`
-  width: ${sm};
-`
-const Logo = styled(LogoIcon)`
-  margin-right: 0.5rem;
-`
-
-function Header() {
-  return (
-    <HeaderRoot>
-      <Link to={INDEX}>
-        <Title>
-          <Logo width={md} />
-          Pordria
-        </Title>
-      </Link>
-      <Nav>
-        <a href={CONTACT_US}>Contact us</a>
-        <Button onClick={() => window.open(GITHUB_INDEX)}>
-          <Github width={sm} />
-          <ButtonContent>Github</ButtonContent>
-        </Button>
-      </Nav>
-    </HeaderRoot>
-  )
+const headerSX: CSSObject = {
+  width: 'full',
+  py: '3',
+  px: '7.5',
+  position: 'sticky',
+  top: '0',
+  zIndex: 'sticky',
+  backdropFilter: 'blur(10px)',
+  bgColor: 'whiteAlpha.10'
 }
+
+const Header = () => (
+  <Flex as="header" sx={headerSX} justify="space-between">
+    <Flex position="relative" align="center">
+      <LogoIcon boxSize="5" mr="2" />
+      <Heading size="md">Pordria</Heading>
+      <LinkOverlay as={ReactLink} to={INDEX} />
+    </Flex>
+    <HStack as="nav" spacing="7.5">
+      <Link href={CONTACT_US}>Contact us</Link>
+      <Button
+        variant="github"
+        onClick={() => window.open(GITHUB_INDEX)}
+        leftIcon={<GithubIcon />}
+      >
+        Github
+      </Button>
+    </HStack>
+  </Flex>
+)
 
 export default Header
