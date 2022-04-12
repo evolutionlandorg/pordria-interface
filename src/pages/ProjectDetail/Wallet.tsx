@@ -1,46 +1,31 @@
-import React, { FC, useEffect, useState } from 'react'
-import styled, { css } from 'styled-components'
-import Button from '@/components/Button'
+import React, { FC, useEffect, useRef } from 'react'
 import useAuth from '@/hooks/useAuth'
 import { ConnectorTypeEnum } from '@/utils/web3-react'
-import { color, computeSize, size } from '@/styles/variables'
-import { CheckIcon, CopyIcon } from '@/components/Icon'
-import copy from 'copy-to-clipboard'
-import toast from 'react-hot-toast'
-import { wait } from '@/utils/misc'
+import {
+  Button as BaseButton,
+  ButtonGroup,
+  chakra,
+  IconButton,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+  Portal,
+  Spacer,
+  useClipboard,
+  useOutsideClick,
+  useToast
+} from '@chakra-ui/react'
+import { CopyIcon } from '@/components/Icon'
+import { ArrowForwardIcon, ChevronDownIcon } from '@chakra-ui/icons'
+import Toast from '@/components/Toast'
 
-const flex = css`
-  display: inline-flex;
-  width: fit-content;
-  align-items: center;
-`
+const WIDTH = '15.625rem'
 
-const Account = styled.div`
-  ${flex}
-  gap: ${size.sm};
-  font-size: ${size.tn};
-`
-
-const AccountContent = styled.span`
-  ${flex}
-  gap: ${computeSize(4)};
-  font-size: ${size.tn};
-  cursor: copy;
-  user-select: none;
-`
-
-const svg = css`
-  width: ${size.tn};
-`
-
-const AccountCopy = styled(CopyIcon)`
-  ${svg}
-`
-
-const AccountCopied = styled(CheckIcon)`
-  ${svg}
-  fill: ${color.success};
-`
+const Button = chakra(BaseButton, {
+  baseStyle: {
+    w: WIDTH
+  }
+})
 
 interface IWalletProps {
   chainID?: number
@@ -48,16 +33,41 @@ interface IWalletProps {
 
 const Wallet: FC<IWalletProps> = ({ chainID }) => {
   const { connectWallet, disconnectWallet, account, setChainID } = useAuth()
-  const [isCopied, setIsCopied] = useState(false)
+  const [isOpen, setIsOpen] = React.useState(false)
+  const { hasCopied, onCopy } = useClipboard(account ?? '')
+  const toast = useToast()
+  const popoverRef = useRef<HTMLDivElement>(null)
+
+  useOutsideClick({
+    ref: popoverRef,
+    handler() {
+      setIsOpen(false)
+    }
+  })
 
   useEffect(() => {
     setChainID(chainID)
   }, [chainID, setChainID])
 
+  useEffect(() => {
+    const toastID = 'clipboard'
+    if (!hasCopied || toast.isActive(toastID)) {
+      return
+    }
+
+    toast({
+      id: toastID,
+      position: 'bottom-right',
+      render: ({ id }) => (
+        <Toast title="Copied to clipboard!" id={id} status="success" />
+      )
+    })
+  }, [hasCopied, toast])
+
   if (!account) {
     return (
-      <Button large onClick={() => connectWallet(ConnectorTypeEnum.INJECTED)}>
-        connect wallet
+      <Button onClick={() => connectWallet(ConnectorTypeEnum.INJECTED)}>
+        Connect Wallet
       </Button>
     )
   }
@@ -66,23 +76,53 @@ const Wallet: FC<IWalletProps> = ({ chainID }) => {
     account.length - 4
   )}`
 
-  const onCopy = async () => {
-    copy(account)
-    toast.success('Copied to clipboard!', {
-      id: 'clipboard'
-    })
-    setIsCopied(true)
-    await wait(1000)
-    setIsCopied(false)
-  }
-
   return (
-    <Account>
-      <AccountContent onClick={onCopy}>
-        {accountEllipsis} {isCopied ? <AccountCopied /> : <AccountCopy />}
-      </AccountContent>
-      <Button onClick={disconnectWallet}>logout</Button>
-    </Account>
+    <Popover placement="bottom-start" isOpen={isOpen} offset={[0, 4]}>
+      <PopoverTrigger>
+        <ButtonGroup
+          w={WIDTH}
+          isAttached
+          bgGradient="linear(270deg, gradient.buttonStart, gradient.buttonEnd)"
+          borderRadius="button"
+        >
+          <BaseButton
+            onClick={onCopy}
+            rightIcon={<CopyIcon color="white" />}
+            w="full"
+            variant="text"
+          >
+            {accountEllipsis}
+            <Spacer />
+          </BaseButton>
+          <IconButton
+            onClick={() => setIsOpen(isOpened => !isOpened)}
+            aria-label="dropdown"
+            icon={<ChevronDownIcon color="white" boxSize="4" />}
+            variant="text"
+          />
+        </ButtonGroup>
+      </PopoverTrigger>
+      <Portal>
+        <PopoverContent
+          _focus={{ boxShadow: 'none' }}
+          w="fit-content"
+          bg="none"
+          border="none"
+          ref={popoverRef}
+        >
+          <Button
+            onClick={disconnectWallet}
+            bgGradient="none"
+            bgColor="white"
+            color="inherit"
+            boxShadow="0px 2px 4px rgba(0, 0, 0, 0.25)"
+            rightIcon={<ArrowForwardIcon />}
+          >
+            logout
+          </Button>
+        </PopoverContent>
+      </Portal>
+    </Popover>
   )
 }
 
