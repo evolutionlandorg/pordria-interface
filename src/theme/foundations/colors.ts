@@ -9,7 +9,9 @@ const colors: ChakraTheme['colors'] = {
   },
   gradient: {
     cardStart: '#B7B7FF',
-    cardEnd: '#9EE7FF'
+    cardEnd: '#9EE7FF',
+    buttonStart: '#A45CFF',
+    buttonEnd: '#77F7FF'
   }
 }
 

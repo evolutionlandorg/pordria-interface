@@ -2,26 +2,31 @@ import { ComponentStyleConfig } from '@chakra-ui/react'
 
 const Button: ComponentStyleConfig = {
   baseStyle: {
-    borderRadius: '1.25rem',
-    color: 'white'
+    borderRadius: 'button',
+    color: 'white',
+    _focus: {
+      boxShadow: 'none'
+    }
+  },
+  sizes: {
+    sm: {
+      h: '9'
+    }
   },
   variants: {
     github: {
       bgColor: 'black'
     },
-    solid: {
-      bgGradient: 'linear(270deg, #A45CFF, #77F7FF)',
-      _hover: {
-        bgGradient: 'linear(270deg, #A45CFF, #77F7FF)'
-      },
-      _active: {
-        bgGradient: 'linear(270deg, #A45CFF, #77F7FF)'
-      }
+    text: {
+      bgColor: 'transparent'
+    },
+    primary: {
+      bgGradient: 'linear(270deg, gradient.buttonStart, gradient.buttonEnd)'
     }
   },
   defaultProps: {
     size: 'sm',
-    variant: 'solid'
+    variant: 'primary'
   }
 }
 
