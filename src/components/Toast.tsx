@@ -21,7 +21,7 @@ const Toast = ({ title, id, status }: UseToastOptions) => {
       variant="solid"
       id={id?.toString()}
       alignItems="start"
-      borderRadius="button"
+      borderRadius="primary"
       boxShadow="lg"
       paddingEnd={8}
       textAlign="start"

@@ -1,13 +1,15 @@
 import { ComponentStyleConfig } from '@chakra-ui/react'
 
 const Input: ComponentStyleConfig = {
-  baseStyle: {
-    field: {}
-  },
   sizes: {
     md: {
       field: {
-        borderRadius: '1.25rem'
+        borderRadius: 'primary'
+      }
+    },
+    sm: {
+      field: {
+        borderRadius: 'primary'
       }
     }
   },

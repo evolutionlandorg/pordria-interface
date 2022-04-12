@@ -2,7 +2,7 @@ import { ComponentStyleConfig } from '@chakra-ui/react'
 
 const Button: ComponentStyleConfig = {
   baseStyle: {
-    borderRadius: 'button',
+    borderRadius: 'primary',
     color: 'white',
     _focus: {
       boxShadow: 'none'
@@ -11,6 +11,12 @@ const Button: ComponentStyleConfig = {
   sizes: {
     sm: {
       h: '9'
+    },
+    '2xs': {
+      h: '5',
+      px: '1',
+      fontSize: 'xs',
+      w: 'fit-content'
     }
   },
   variants: {
@@ -21,7 +27,22 @@ const Button: ComponentStyleConfig = {
       bgColor: 'transparent'
     },
     primary: {
-      bgGradient: 'linear(270deg, gradient.buttonStart, gradient.buttonEnd)'
+      bgGradient: 'linear(to left, gradient.primaryStart, gradient.primaryEnd)',
+      _hover: {
+        _disabled: {
+          bgGradient:
+            'linear(to left, gradient.primaryStart, gradient.primaryEnd)'
+        }
+      }
+    },
+    'primary-outline': {
+      color: 'purple.400',
+      borderWidth: '1px',
+      borderColor: 'transparent',
+      bgClip: 'padding-box, border-box',
+      backgroundOrigin: 'padding-box, border-box',
+      bgGradient:
+        'linear(to-l, white, white), linear-gradient(to left, gradient.primaryStart, gradient.primaryEnd)'
     }
   },
   defaultProps: {

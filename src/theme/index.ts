@@ -6,6 +6,7 @@ import radii from './foundations/radii'
 import styles from './styles'
 import Button from './components/button'
 import Input from './components/input'
+import Modal from './components/modal'
 
 const breakpoints = {
   sm: '414px',
@@ -22,7 +23,8 @@ const theme = extendTheme({
   radii,
   components: {
     Button,
-    Input
+    Input,
+    Modal
   }
 })
 
