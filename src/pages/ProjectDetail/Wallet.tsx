@@ -31,8 +31,13 @@ interface IWalletProps {
 }
 
 const Wallet: FC<IWalletProps> = ({ chainID }) => {
-  const { connectWallet, disconnectWallet, account, setChainID, isError } =
-    useAuth()
+  const {
+    connectWallet,
+    disconnectWallet,
+    account,
+    setChainID,
+    isNetworkError
+  } = useAuth()
   const [isOpen, setIsOpen] = React.useState(false)
   const { hasCopied, onCopy } = useClipboard(account ?? '')
   const toast = useToast()
@@ -65,12 +70,23 @@ const Wallet: FC<IWalletProps> = ({ chainID }) => {
   if (!account) {
     return (
       <Button
-        variant={isError ? 'solid' : 'primary'}
-        colorScheme={isError ? 'red' : ''}
-        leftIcon={isError ? <InfoIcon /> : null}
+        variant="primary"
         onClick={() => connectWallet(ConnectorTypeEnum.INJECTED)}
       >
         Connect Wallet
+      </Button>
+    )
+  }
+
+  if (isNetworkError) {
+    return (
+      <Button
+        variant="solid"
+        colorScheme="red"
+        leftIcon={<InfoIcon />}
+        onClick={() => connectWallet(ConnectorTypeEnum.INJECTED)}
+      >
+        Wrong Network
       </Button>
     )
   }

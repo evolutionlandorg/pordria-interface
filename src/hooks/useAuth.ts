@@ -16,13 +16,12 @@ import {
   WalletConnectConnector
 } from '@web3-react/walletconnect-connector'
 import { useCallback, useEffect, useState } from 'react'
-import { useBoolean } from '@chakra-ui/react'
 import useToast from '@/hooks/useToast'
 
 const useAuth = () => {
   const { activate, deactivate, account } = useWeb3React()
   const [chainID, setChainID] = useState<ChainIDEnum>()
-  const [isError, setIsError] = useBoolean()
+  const [isNetworkError, setIsNetworkError] = useState(false)
   const toast = useToast()
 
   const disconnectWallet = useCallback(() => {
@@ -50,7 +49,7 @@ const useAuth = () => {
       localStorage.setItem(LocalKeyEnum.CURRENT_CONNECTOR, connectorType)
       try {
         await activate(connector, undefined, true)
-        setIsError.off()
+        setIsNetworkError(false)
         connectedHandler()
       } catch (error) {
         try {
@@ -65,9 +64,10 @@ const useAuth = () => {
             const hasSetup = await setupNetwork(chainID)
             if (hasSetup) {
               await activate(connector)
-              setIsError.off()
+              setIsNetworkError(false)
               return
             }
+            setIsNetworkError(true)
             throw new Error('Unsupported network')
           }
 
@@ -91,7 +91,6 @@ const useAuth = () => {
 
           throw error
         } catch (err) {
-          setIsError.on()
           window.localStorage.removeItem(LocalKeyEnum.CURRENT_CONNECTOR)
           if (err instanceof Error) {
             toast({
@@ -103,19 +102,25 @@ const useAuth = () => {
         }
       }
     },
-    [activate, connectedHandler, chainID, setIsError, toast]
+    [activate, connectedHandler, chainID, toast]
   )
 
   useEffect(() => {
     const connector = localStorage.getItem(LocalKeyEnum.CURRENT_CONNECTOR)
-    if (!connector || account) {
+    if (!connector) {
       return
     }
 
     connectWallet(connector as ConnectorTypeEnum)
-  }, [connectWallet, account])
+  }, [connectWallet])
 
-  return { connectWallet, disconnectWallet, account, setChainID, isError }
+  return {
+    connectWallet,
+    disconnectWallet,
+    account,
+    setChainID,
+    isNetworkError
+  }
 }
 
 export default useAuth

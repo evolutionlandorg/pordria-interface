@@ -39,7 +39,7 @@ const MAX_TIME = 2 ** 32 - 1
 const EventItem = ({ item }: EventItemProps) => {
   const { name, detail, proofURI, chainId, address, claims, root } = item
   const { rpcUrls } = networkMap[chainId]
-  const { account, connectWallet, setChainID } = useAuth()
+  const { account, connectWallet, setChainID, isNetworkError } = useAuth()
   const [user, setUser] = useState('')
   const [isOpen, setIsOpen] = useBoolean(false)
   const [isLoading, setIsLoading] = useBoolean(false)
@@ -178,7 +178,7 @@ const EventItem = ({ item }: EventItemProps) => {
   }
 
   const renderPrimaryButton = () => {
-    if (!account) {
+    if (!account || isNetworkError) {
       return (
         <Button
           w="8.75rem"
