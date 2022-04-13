@@ -55,7 +55,7 @@ const EventResults = ({ list = [], chainID }: IEventResultsProps) => {
 
       <SimpleGrid
         sx={listSX}
-        bgColor="gray.100"
+        bgColor="gray.eventsBg"
         borderTopRadius="primary"
         mt="5"
       >
@@ -70,7 +70,9 @@ const EventResults = ({ list = [], chainID }: IEventResultsProps) => {
           Operation
         </Heading>
       </SimpleGrid>
-      <SimpleGrid sx={listSX}>{renderEvents()}</SimpleGrid>
+      <SimpleGrid sx={listSX} bgColor="white">
+        {renderEvents()}
+      </SimpleGrid>
     </Wrapper>
   )
 }

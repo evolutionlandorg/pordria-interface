@@ -7,6 +7,9 @@ const colors: ChakraTheme['colors'] = {
   turquoise: {
     900: '#02DEF6'
   },
+  gray: {
+    eventsBg: '#F4FAFF'
+  },
   gradient: {
     cardStart: '#B7B7FF',
     cardEnd: '#9EE7FF',

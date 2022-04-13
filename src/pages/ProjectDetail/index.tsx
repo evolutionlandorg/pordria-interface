@@ -46,6 +46,7 @@ function ProjectDetail() {
 
   return (
     <SimpleGrid
+      minW={{ base: 'full', lg: 'initial' }}
       templateColumns={{
         base: '1fr',
         lg: `${theme.sizes['60']} ${theme.sizes['4xl']}`

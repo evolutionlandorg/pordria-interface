@@ -2,7 +2,7 @@ import React, { FC } from 'react'
 import { Link, LinkProps } from 'react-router-dom'
 import { IRenderItem } from '@/hooks/useFetchEventList'
 import { ArrowRightIcon } from '@/components/Icon'
-import { Box, CSSObject, Heading, LinkOverlay, Text } from '@chakra-ui/react'
+import { CSSObject, Heading, LinkOverlay, Text, Flex } from '@chakra-ui/react'
 import ImgWithFb from '@/components/ImgWithFb'
 
 interface CardProps extends LinkProps {
@@ -12,7 +12,7 @@ interface CardProps extends LinkProps {
 
 const cardSX: CSSObject = {
   position: 'relative',
-  p: '10',
+  p: '6',
   bgClip: 'padding-box, border-box',
   backgroundOrigin: 'padding-box, border-box',
   border: '1px solid',
@@ -29,23 +29,27 @@ const Card: FC<CardProps> = ({ to, item, id }) => {
   const { projectDetail } = item
   const { logoURI, name } = projectDetail || {}
   return (
-    <Box
+    <Flex
+      direction="column"
       sx={cardSX}
+      justify="space-between"
       maxW="40"
       borderTopRadius="6.25rem"
       borderBottomRadius="xl"
       bgGradient="linear(to-tr, white, white), linear-gradient(180deg, gradient.cardStart, gradient.cardEnd)"
     >
-      <ImgWithFb boxSize="16" mx="auto" src={logoURI} alt={name} />
-      <Heading size="sm" mt="4" mb="3">
+      <ImgWithFb boxSize="16" mx="auto" src={logoURI} alt={name} mt="4" />
+      <Heading size="sm" mt="4" mb="3" overflowWrap="break-word">
         {name}
       </Heading>
-      <Text>
-        Detail
-        <ArrowRightIcon width="3" ml="1" />
-      </Text>
-      <LinkOverlay to={`${to}?url=${id}`} as={Link} />
-    </Box>
+      <div>
+        <Text>
+          Detail
+          <ArrowRightIcon width="3" ml="1" />
+        </Text>
+        <LinkOverlay to={`${to}?url=${id}`} as={Link} />
+      </div>
+    </Flex>
   )
 }
 
