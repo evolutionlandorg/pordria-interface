@@ -1,7 +1,6 @@
 import Header from '@/components/Header'
 import React from 'react'
 import { Outlet } from 'react-router-dom'
-import Notifications from '@/components/Notifications'
 import { Flex } from '@chakra-ui/react'
 
 function Layout() {
@@ -9,7 +8,6 @@ function Layout() {
     <Flex direction="column" align="center" minHeight="100vh">
       <Header />
       <Outlet />
-      <Notifications />
     </Flex>
   )
 }

@@ -4,7 +4,7 @@ import { getLibrary } from '@/utils/web3-react'
 import { ChakraProvider } from '@chakra-ui/react'
 import theme from '@/theme'
 
-const Provider: FC<{}> = ({ children }) => (
+const Provider: FC = ({ children }) => (
   <Web3ReactProvider getLibrary={getLibrary}>
     <ChakraProvider theme={theme}>{children}</ChakraProvider>
   </Web3ReactProvider>
