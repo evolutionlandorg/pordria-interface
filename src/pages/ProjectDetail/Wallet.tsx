@@ -12,12 +12,11 @@ import {
   Portal,
   Spacer,
   useClipboard,
-  useOutsideClick,
-  useToast
+  useOutsideClick
 } from '@chakra-ui/react'
 import { CopyIcon } from '@/components/Icon'
-import { ArrowForwardIcon, ChevronDownIcon } from '@chakra-ui/icons'
-import Toast from '@/components/Toast'
+import { ArrowForwardIcon, ChevronDownIcon, InfoIcon } from '@chakra-ui/icons'
+import useToast from '@/hooks/useToast'
 
 const WIDTH = '15.625rem'
 
@@ -32,7 +31,8 @@ interface IWalletProps {
 }
 
 const Wallet: FC<IWalletProps> = ({ chainID }) => {
-  const { connectWallet, disconnectWallet, account, setChainID } = useAuth()
+  const { connectWallet, disconnectWallet, account, setChainID, isError } =
+    useAuth()
   const [isOpen, setIsOpen] = React.useState(false)
   const { hasCopied, onCopy } = useClipboard(account ?? '')
   const toast = useToast()
@@ -51,22 +51,25 @@ const Wallet: FC<IWalletProps> = ({ chainID }) => {
 
   useEffect(() => {
     const toastID = 'clipboard'
-    if (!hasCopied || toast.isActive(toastID)) {
+    if (!hasCopied) {
       return
     }
 
     toast({
       id: toastID,
-      position: 'bottom-right',
-      render: ({ id }) => (
-        <Toast title="Copied to clipboard!" id={id} status="success" />
-      )
+      status: 'success',
+      title: 'Copied to clipboard!'
     })
   }, [hasCopied, toast])
 
   if (!account) {
     return (
-      <Button onClick={() => connectWallet(ConnectorTypeEnum.INJECTED)}>
+      <Button
+        variant={isError ? 'solid' : 'primary'}
+        colorScheme={isError ? 'red' : ''}
+        leftIcon={isError ? <InfoIcon /> : null}
+        onClick={() => connectWallet(ConnectorTypeEnum.INJECTED)}
+      >
         Connect Wallet
       </Button>
     )
@@ -82,8 +85,8 @@ const Wallet: FC<IWalletProps> = ({ chainID }) => {
         <ButtonGroup
           w={WIDTH}
           isAttached
-          bgGradient="linear(270deg, gradient.buttonStart, gradient.buttonEnd)"
-          borderRadius="button"
+          bgGradient="linear(270deg, gradient.primaryStart, gradient.primaryEnd)"
+          borderRadius="primary"
         >
           <BaseButton
             onClick={onCopy}
