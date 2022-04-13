@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import useFetch from '@/hooks/useFetch'
 import { createDataArrayClaim, getRoot } from '@/utils/merkle-tree'
+import { isHTTP } from '@/utils/misc'
 
 export interface IProjectDetail {
   name?: string
@@ -21,7 +22,7 @@ interface IRenderList {
 }
 
 export function getUrl(projectID: string): string {
-  if (/^http(s)?:\/\//.test(projectID)) {
+  if (isHTTP(projectID)) {
     return projectID
   }
   if (projectID.endsWith('.eth')) {

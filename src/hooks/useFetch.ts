@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react'
-import toast from 'react-hot-toast'
+import useToast from '@/hooks/useToast'
 
 interface IFetchErrorConstructor {
   code: number
@@ -23,6 +23,7 @@ class FetchError extends Error {
 const useFetch = () => {
   const [isLoading, setIsLoading] = useState(true)
   const [isError, setIsError] = useState(false)
+  const toast = useToast()
 
   const fetchData = useCallback(
     async <T>(url: RequestInfo, init?: FetchInit): Promise<T | undefined> => {
@@ -46,7 +47,10 @@ const useFetch = () => {
           if (catchError) {
             catchError(e)
           } else {
-            toast.error(e.message || 'Error')
+            toast({
+              status: 'error',
+              title: e.message || 'Error'
+            })
           }
         }
         setIsError(true)
@@ -55,7 +59,7 @@ const useFetch = () => {
       setIsLoading(false)
       return res
     },
-    []
+    [toast]
   )
 
   return { isLoading, isError, fetchData }
