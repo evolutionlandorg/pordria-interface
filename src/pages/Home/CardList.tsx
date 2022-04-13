@@ -31,8 +31,8 @@ function CardList() {
             id={k}
             item={{
               projectDetail: {
-                ...projects[k],
-                ...projectDetail
+                ...projectDetail,
+                ...projects[k]
               },
               loading,
               error
@@ -66,7 +66,7 @@ function CardList() {
         spacing="7.5"
         maxW={{ base: 'initial', lg: '37.5rem' }}
         minW={{ base: 'initial', lg: '37.5rem' }}
-        py="24"
+        py="25"
       >
         {getRender()}
       </SimpleGrid>

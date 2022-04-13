@@ -1,65 +1,108 @@
-import { IEventItem } from '@/hooks/useFetchEventList'
-import React, { useEffect, useState } from 'react'
-import styled from 'styled-components'
+import React, { useEffect, useMemo, useState } from 'react'
 import networkMap from '@/config/network'
 import { BigNumber, Contract, providers } from 'ethers'
 import claimsABI from '@/config/network/claims.abi.json'
-import toast from 'react-hot-toast'
-import Button from '@/components/Button'
-import { baseColor, computeSize, size, weight } from '@/styles/variables'
 import useAuth from '@/hooks/useAuth'
+import {
+  Text,
+  Button,
+  ButtonGroup,
+  chakra,
+  Show,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  useBoolean,
+  Input,
+  Link
+} from '@chakra-ui/react'
+import { formateDate, isHTTP } from '@/utils/misc'
+import { ConnectorTypeEnum } from '@/utils/web3-react'
+import useToast from '@/hooks/useToast'
 
-export const ItemContainer = styled.div`
-  display: grid;
-  grid-gap: 1rem;
-  grid-template-columns: ${computeSize(128)} ${computeSize(96)} 1fr ${computeSize(
-      104
-    )};
-  align-items: center;
-  margin-bottom: 1rem;
-  font-size: ${size.sm};
-  font-weight: ${weight.semiBold};
-  color: ${baseColor.onPrimary};
-  word-break: break-all;
-  white-space: pre-wrap;
-
-  @media screen and (max-width: 414px) {
-    span {
-      display: none;
-      :last-child,
-      :first-child {
-        display: block;
-      }
-    }
-
-    grid-template-columns: 1fr ${computeSize(104)};
+const OperationButton = chakra(Button, {
+  baseStyle: {
+    fontWeight: 'bold'
   }
-`
+})
 
-const Opts = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-`
-
-interface IEventItemProps {
-  item: IEventItem
-  user: string
-  claimable?: boolean
+interface EventItemProps {
+  item: EventItem
 }
 
 const MAX_TIME = 2 ** 32 - 1
 
-const EventItem = ({ item, user, claimable = false }: IEventItemProps) => {
+const EventItem = ({ item }: EventItemProps) => {
   const { name, detail, proofURI, chainId, address, claims, root } = item
   const { rpcUrls } = networkMap[chainId]
-  const { account } = useAuth()
+  const { account, connectWallet, setChainID } = useAuth()
+  const [user, setUser] = useState('')
+  const [isOpen, setIsOpen] = useBoolean(false)
+  const [isLoading, setIsLoading] = useBoolean(false)
+  const [isClaimed, setIsClaimed] = useState<boolean | null>(null)
+  const toast = useToast()
+  const provider = useMemo(() => {
+    if (rpcUrls && rpcUrls.length > 0) {
+      return new providers.JsonRpcBatchProvider(rpcUrls[0])
+    }
 
-  const [endTimestamp, setEndTimestamp] = useState<number | null>()
+    return null
+  }, [rpcUrls])
+  const contract = useMemo(() => {
+    if (provider) {
+      return new Contract(address, claimsABI, provider)
+    }
+
+    return null
+  }, [provider, address])
+  const userClaim = useMemo(() => {
+    let claim: IClaim | undefined
+    for (const c of claims) {
+      const { to } = c
+      if (to.toLowerCase() === user.toLowerCase()) {
+        claim = c
+      }
+    }
+
+    return claim
+  }, [claims, user])
+  useEffect(() => {
+    if (chainId) {
+      setChainID(chainId)
+    }
+  }, [chainId, setChainID])
 
   useEffect(() => {
+    async function checkClaimStatus() {
+      if (!contract || !root || !user) {
+        return
+      }
+
+      try {
+        setIsClaimed(null)
+        await contract.getClaimedStatus(user, [root])
+        setIsClaimed(true)
+        return
+      } catch (error) {
+        // do nothing
+      }
+
+      setIsClaimed(false)
+    }
+
+    checkClaimStatus()
+  }, [contract, user, root])
+
+  const [endTimestamp, setEndTimestamp] = useState<number | null>()
+  useEffect(() => {
     async function getEndTime() {
-      const provider = new providers.JsonRpcBatchProvider(rpcUrls[0])
-      const contract = new Contract(address, claimsABI, provider)
+      if (!contract) {
+        return
+      }
       const res: BigNumber = await contract.getExpiryTime(root)
       let time: number | null = null
       try {
@@ -75,55 +118,35 @@ const EventItem = ({ item, user, claimable = false }: IEventItemProps) => {
       setEndTimestamp(time)
     }
 
-    if (root) {
+    if (contract && root) {
       getEndTime()
     }
-  }, [root, address, rpcUrls])
-
-  const formateDate = () => {
-    if (endTimestamp === null) {
-      return 'never expire'
-    }
-
-    if (!endTimestamp) {
-      return '-'
-    }
-
-    const date = new Date(endTimestamp)
-    return `${date.getFullYear()}-${
-      date.getMonth() + 1
-    }-${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
-  }
+  }, [root, address, rpcUrls, contract])
 
   const openProof = () => {
     window.open(proofURI)
   }
 
+  const open = () => setIsOpen.on()
+  const close = () => setIsOpen.off()
+
   const claim = async () => {
+    setIsLoading.on()
     try {
       if (!account) {
         throw new Error('Please connect wallet first')
       }
 
-      if (!root || !claims) {
+      if (!userClaim || !contract) {
         throw new Error('Data loading...')
+      }
+
+      if (!user) {
+        throw new Error('Please enter an address')
       }
 
       if (endTimestamp && Date.now() > endTimestamp) {
         throw new Error('Airdrop expired')
-      }
-
-      const provider = new providers.JsonRpcBatchProvider(rpcUrls[0])
-      const contract = new Contract(address, claimsABI, provider)
-
-      try {
-        const [isClaimed] = await contract.getClaimedStatus(user, [root])
-
-        if (isClaimed) {
-          throw new Error()
-        }
-      } catch (error) {
-        throw new Error('Airdrop was claimed')
       }
 
       const { ethereum } = window
@@ -136,21 +159,7 @@ const EventItem = ({ item, user, claimable = false }: IEventItemProps) => {
       )
 
       const signer = ethereumProvider.getSigner()
-
       const contractWithSigner = new Contract(address, claimsABI, signer)
-
-      let userClaim: IClaim | undefined
-      for (const c of claims) {
-        const { to } = c
-        if (to.toLowerCase() === user.toLowerCase()) {
-          userClaim = c
-        }
-      }
-
-      if (!userClaim) {
-        throw new Error('No proof')
-      }
-
       await contractWithSigner.claimMultipleTokens(
         root,
         userClaim,
@@ -158,30 +167,111 @@ const EventItem = ({ item, user, claimable = false }: IEventItemProps) => {
       )
     } catch (error) {
       if (error instanceof Error) {
-        toast.error(error.message)
+        toast({
+          status: 'error',
+          title: error.message
+        })
       }
     }
+
+    setIsLoading.off()
+  }
+
+  const renderPrimaryButton = () => {
+    if (!account) {
+      return (
+        <Button
+          w="8.75rem"
+          onClick={() => connectWallet(ConnectorTypeEnum.INJECTED)}
+        >
+          Connect Wallet
+        </Button>
+      )
+    }
+
+    if (isClaimed) {
+      return (
+        <Button
+          disabled
+          w="8.75rem"
+          variant="solid"
+          color="gray.900"
+          bgColor="gray.200"
+          _hover={{
+            bgColor: 'gray.200'
+          }}
+        >
+          Claimed
+        </Button>
+      )
+    }
+
+    return (
+      <Button
+        isLoading={isLoading}
+        disabled={!userClaim || isClaimed === null}
+        w="8.75rem"
+        onClick={claim}
+      >
+        Claim
+      </Button>
+    )
   }
 
   return (
-    <ItemContainer>
-      <span>{name}</span>
-      <span>{formateDate()}</span>
-      <span>{detail}</span>
-      <Opts>
-        <Button onClick={claim} width="100%" disabled={!claimable}>
+    <>
+      <Text>{name}</Text>
+      <Show above="lg">
+        <Text>{formateDate(endTimestamp)}</Text>
+      </Show>
+      <Show above="sm">
+        {isHTTP(detail) ? (
+          <Link href={detail} target="_blank">
+            {detail}
+          </Link>
+        ) : (
+          <Text>{detail}</Text>
+        )}
+      </Show>
+      <ButtonGroup justifySelf="end">
+        <OperationButton onClick={open} size="2xs">
           Claim
-        </Button>
-        <Button onClick={openProof} width="100%">
+        </OperationButton>
+        <OperationButton onClick={openProof} size="2xs" variant="outline">
           List
-        </Button>
-      </Opts>
-    </ItemContainer>
-  )
-}
+        </OperationButton>
+      </ButtonGroup>
 
-EventItem.defaultProps = {
-  claimable: false
+      <Modal isOpen={isOpen} onClose={close} size="xl">
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Claim rewards</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Text>
+              Enter an address to find available airdrops and claim for this
+              address.
+            </Text>
+            <Input
+              size="sm"
+              mt="5"
+              onChange={e => setUser(e.target.value)}
+              value={user}
+            />
+          </ModalBody>
+
+          <ModalFooter>
+            <ButtonGroup>
+              {renderPrimaryButton()}
+              <Button w="8.75rem" variant="primary-outline" onClick={close}>
+                Cancel
+              </Button>
+            </ButtonGroup>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    </>
+  )
 }
 
 export default EventItem
