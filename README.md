@@ -7,7 +7,7 @@ This is a permissionless airdrop protocol, which can be used by both projects an
 
 ## Guide
 
-### As a cooperator
+### As a airdrop sender
 
 #### JSON Schema
 The JSON schema ID is https://pordria.evolution.land/event-list-schema.json
@@ -19,7 +19,7 @@ As long as the JSON specification is followed properly, please submit an issue v
 ### As a user
 #### Find the project of event or airdrop
 
-If the event or the airdrop is **from our cooperators**, please check it on [Pordria Homepage](https://pordria.evolution.land).
+If the event or the airdrop is **from our airdrop sender s**, please check it on [Pordria Homepage](https://pordria.evolution.land).
 
 If you **cannot** find the event or airdrop on our website, please check the bottom of the website, then input a url which returns a result following the structure below
 ```json
