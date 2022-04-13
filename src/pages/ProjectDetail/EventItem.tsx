@@ -84,8 +84,8 @@ const EventItem = ({ item }: EventItemProps) => {
 
       try {
         setIsClaimed(null)
-        await contract.getClaimedStatus(user, [root])
-        setIsClaimed(true)
+        const [claimStatus] = await contract.getClaimedStatus(user, [root])
+        setIsClaimed(claimStatus)
         return
       } catch (error) {
         // do nothing
