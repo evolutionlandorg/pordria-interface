@@ -1,116 +1,77 @@
-import React, { useMemo, useState } from 'react'
-import styled from 'styled-components'
-import Search from '@/components/Search'
-import { IEventItem } from '@/hooks/useFetchEventList'
-import { baseColor, computeSize, size, weight } from '@/styles/variables'
-import EventItem, { ItemContainer } from './EventItem'
+import React, { useMemo } from 'react'
+import {
+  chakra,
+  CSSObject,
+  Flex,
+  Heading,
+  Show,
+  SimpleGrid,
+  useChakra
+} from '@chakra-ui/react'
 import Wallet from './Wallet'
+import EventItem from './EventItem'
 
-const OptBar = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 2rem;
-`
-
-const OptContent = styled.div`
-  display: flex;
-  align-items: center;
-  gap: ${computeSize(30)};
-`
-
-const OptSearch = styled(Search)`
-  flex: 1;
-`
-const OptSearchTips = styled.p`
-  margin: 0;
-  margin-top: ${computeSize(8)};
-  font-size: ${size.tn};
-  font-weight: ${weight.semiBold};
-  color: ${baseColor.onPrimary};
-`
-
-const StyledResults = styled.div`
-  padding: 3rem 0;
-`
-const ListTitle = styled(ItemContainer)`
-  color: ${baseColor.secondary};
-  margin-bottom: ${computeSize(20)};
-`
-
-const Opt = styled.span`
-  text-align: right;
-`
+const Wrapper = chakra('section', {
+  baseStyle: {
+    py: '10'
+  }
+})
 interface IEventResultsProps {
-  list?: IEventItem[]
+  list?: EventItem[]
   chainID?: number
 }
 
 const EventResults = ({ list = [], chainID }: IEventResultsProps) => {
-  const [roots, setRoots] = useState<string[]>([])
-  const [user, setUser] = useState('')
-  const [searchValue, setSearchValue] = useState('')
-  const searchResource = useMemo(() => {
-    const res: { [key: string]: string[] } = {}
-    list.forEach(({ root, claims }) => {
-      claims.forEach(({ to }) => {
-        const lowerCaseTo = to.toLowerCase()
-        const hasTo = Array.isArray(res[lowerCaseTo])
-        if (!hasTo) {
-          res[lowerCaseTo] = []
-        }
+  const { theme } = useChakra()
 
-        res[lowerCaseTo].push(root)
-      })
-    })
-
-    return res
-  }, [list])
-
-  const search = (value: string) => {
-    const searchResult = searchResource[value] || []
-    setUser(value)
-
-    setRoots(searchResult)
-  }
+  const listSX = useMemo<CSSObject>(
+    () => ({
+      gridTemplateColumns: {
+        base: `1fr ${theme.sizes['20']}`,
+        sm: `${theme.sizes['36']} 1fr ${theme.sizes['20']}`,
+        lg: `${theme.sizes['36']} ${theme.sizes['40']} 1fr ${theme.sizes['20']}`
+      },
+      py: '3',
+      px: '6',
+      gap: '4',
+      wordBreak: 'break-all',
+      whiteSpace: 'pre-wrap',
+      alignItems: 'center'
+    }),
+    [theme]
+  )
 
   const renderEvents = () =>
     list.map(item => {
       const { root } = item
-      return (
-        <EventItem
-          key={root}
-          item={item}
-          user={user}
-          claimable={roots.includes(root)}
-        />
-      )
+      return <EventItem key={root} item={item} />
     })
 
   return (
-    <StyledResults>
-      <OptBar>
-        <OptContent>
-          <OptSearch
-            onSearch={() => search(searchValue)}
-            onChange={e => setSearchValue(e.target.value.toLowerCase())}
-            value={searchValue}
-          />
-          <Wallet chainID={chainID} />
-        </OptContent>
-        <OptSearchTips>
-          {user
-            ? `You are claiming for: ${user}`
-            : 'Enter an address to find available airdrops and claim for this address.'}
-        </OptSearchTips>
-      </OptBar>
-      <ListTitle>
-        <span>Event ID</span>
-        <span>End Time</span>
-        <span>Detail</span>
-        <Opt>Operation</Opt>
-      </ListTitle>
-      {renderEvents()}
-    </StyledResults>
+    <Wrapper>
+      <Flex justify="flex-end">
+        <Wallet chainID={chainID} />
+      </Flex>
+
+      <SimpleGrid
+        sx={listSX}
+        bgColor="gray.100"
+        borderTopRadius="primary"
+        mt="5"
+      >
+        <Heading size="xs">Event ID</Heading>
+        <Show above="lg">
+          <Heading size="xs">End Time</Heading>
+        </Show>
+        <Show above="sm">
+          <Heading size="xs">Detail</Heading>
+        </Show>
+        <Heading size="xs" justifySelf="end">
+          Operation
+        </Heading>
+      </SimpleGrid>
+      <SimpleGrid sx={listSX}>{renderEvents()}</SimpleGrid>
+    </Wrapper>
   )
 }
 
