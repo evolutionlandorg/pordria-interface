@@ -17,17 +17,19 @@ const Input: ComponentStyleConfig = {
     outline: {
       field: {
         color: 'turquoise.900',
-        borderColor: 'turquoise.900',
+        fontWeight: 'black',
+        borderColor: 'turquoise.800',
         _hover: {
           borderColor: 'turquoise.900'
         },
         _focus: {
           zIndex: 1,
           borderColor: 'turquoise.900',
-          boxShadow: `0 0 0 1px turquoise.900`
+          boxShadow: 'none'
         },
         '::placeholder': {
-          color: 'turquoise.900'
+          color: 'turquoise.800',
+          fontWeight: 'normal'
         }
       }
     }

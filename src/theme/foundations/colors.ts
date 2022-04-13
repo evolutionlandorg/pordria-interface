@@ -5,7 +5,8 @@ const colors: ChakraTheme['colors'] = {
     10: 'rgba(255, 255, 255, 0.01)'
   },
   turquoise: {
-    900: '#02DEF6'
+    900: '#0BC3D7',
+    800: '#02DEF6'
   },
   gray: {
     eventsBg: '#F4FAFF'
