@@ -256,7 +256,7 @@ const EventItem = ({ item }: EventItemProps) => {
               size="sm"
               mt="5"
               onChange={e => setUser(e.target.value)}
-              placeholder="Enter the address you will claim for"
+              placeholder="0x..."
               value={user}
             />
           </ModalBody>
