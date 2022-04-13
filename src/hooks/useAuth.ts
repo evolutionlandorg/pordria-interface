@@ -108,12 +108,12 @@ const useAuth = () => {
 
   useEffect(() => {
     const connector = localStorage.getItem(LocalKeyEnum.CURRENT_CONNECTOR)
-    if (!connector) {
+    if (!connector || account) {
       return
     }
 
     connectWallet(connector as ConnectorTypeEnum)
-  }, [connectWallet])
+  }, [connectWallet, account])
 
   return { connectWallet, disconnectWallet, account, setChainID, isError }
 }
