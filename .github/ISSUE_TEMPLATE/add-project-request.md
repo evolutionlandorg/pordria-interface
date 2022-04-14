@@ -16,8 +16,6 @@ Checklist
 
 - [ ] I understand that submitting an issue does not guarantee inclusion of my project to Pordria.
 
-- [ ] Regarding this adding project request, I will not ping the Discord.
-
 **Please also provide the following information for your project.**
 Project url must be HTTPS.
 

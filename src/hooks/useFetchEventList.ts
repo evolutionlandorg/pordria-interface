@@ -1,24 +1,14 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import useFetch from '@/hooks/useFetch'
 import { createDataArrayClaim, getRoot } from '@/utils/merkle-tree'
-
-export interface IEventItem {
-  chainId: number
-  address: string
-  name: string
-  detail: string
-  logoURI: string
-  proofURI: string
-  claims: IClaim[]
-  root: string
-}
+import { isHTTP } from '@/utils/misc'
 
 export interface IProjectDetail {
-  name: string
+  name?: string
   timestamp?: string
   version?: { major: number; minor: number; patch: number }
   logoURI?: string
-  events?: IEventItem[]
+  events?: EventItem[]
 }
 
 export interface IRenderItem {
@@ -32,7 +22,7 @@ interface IRenderList {
 }
 
 export function getUrl(projectID: string): string {
-  if (/^http(s)?:\/\//.test(projectID)) {
+  if (isHTTP(projectID)) {
     return projectID
   }
   if (projectID.endsWith('.eth')) {
@@ -49,10 +39,10 @@ const useFetchEventList = (
   const { fetchData } = useFetch()
   const [renderList, setRenderList] = useState<IRenderList>({})
 
-  const fetchEventList = useCallback(async () => {
+  const fetchEventList = useCallback(() => {
     if (projectsID && projectsID.length > 0) {
       projectsID.forEach(projectID => {
-        fetchData<IProjectDetail>(getUrl(projectID))
+        fetchData<IProjectDetail>(getUrl(projectID), { catchError: () => {} })
           .then(async eventList => {
             if (isClaimsIncluded && eventList) {
               const { events = [] } = eventList

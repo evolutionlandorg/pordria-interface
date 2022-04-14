@@ -16,14 +16,15 @@ import {
   WalletConnectConnector
 } from '@web3-react/walletconnect-connector'
 import { useCallback, useEffect, useState } from 'react'
-import toast from 'react-hot-toast'
+import useToast from '@/hooks/useToast'
 
 const useAuth = () => {
   const { activate, deactivate, account } = useWeb3React()
   const [chainID, setChainID] = useState<ChainIDEnum>()
+  const [isNetworkError, setIsNetworkError] = useState(false)
+  const toast = useToast()
 
   const disconnectWallet = useCallback(() => {
-    // dispatch(profileClear())
     deactivate()
     window.localStorage.removeItem(LocalKeyEnum.CURRENT_CONNECTOR)
   }, [deactivate])
@@ -44,22 +45,29 @@ const useAuth = () => {
       if (!chainID) {
         return
       }
-
       const connector = getConnector(chainID, connectorType)
       localStorage.setItem(LocalKeyEnum.CURRENT_CONNECTOR, connectorType)
       try {
         await activate(connector, undefined, true)
+        setIsNetworkError(false)
         connectedHandler()
       } catch (error) {
         try {
           if (error instanceof UnsupportedChainIdError) {
-            toast.error('Unsupported network, trying to connect to another')
+            const msg = 'Unsupported network, trying to connect to another'
+            toast({
+              id: msg,
+              status: 'error',
+              title: msg
+            })
             await wait(1000)
             const hasSetup = await setupNetwork(chainID)
             if (hasSetup) {
               await activate(connector)
+              setIsNetworkError(false)
               return
             }
+            setIsNetworkError(true)
             throw new Error('Unsupported network')
           }
 
@@ -85,12 +93,16 @@ const useAuth = () => {
         } catch (err) {
           window.localStorage.removeItem(LocalKeyEnum.CURRENT_CONNECTOR)
           if (err instanceof Error) {
-            toast.error(err.message)
+            toast({
+              id: err.message,
+              status: 'error',
+              title: err.message
+            })
           }
         }
       }
     },
-    [activate, connectedHandler, chainID]
+    [activate, connectedHandler, chainID, toast]
   )
 
   useEffect(() => {
@@ -102,7 +114,13 @@ const useAuth = () => {
     connectWallet(connector as ConnectorTypeEnum)
   }, [connectWallet])
 
-  return { connectWallet, disconnectWallet, account, setChainID }
+  return {
+    connectWallet,
+    disconnectWallet,
+    account,
+    setChainID,
+    isNetworkError
+  }
 }
 
 export default useAuth

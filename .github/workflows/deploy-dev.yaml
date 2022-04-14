@@ -24,7 +24,7 @@ jobs:
           vercel_token: ${{ secrets.VERCEL_TOKEN }}
           vercel_group: itering
           preview_output: true
-          alias_domain: prodria-dev
+          alias_domain: pordria-dev
 
       - uses: marocchino/sticky-pull-request-comment@v2
         with:

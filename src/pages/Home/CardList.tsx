@@ -1,76 +1,17 @@
 import React, { useState } from 'react'
-import styled from 'styled-components'
 import { PROJECT_DETAIL } from '@/config/routers'
 import useFetchEventList from '@/hooks/useFetchEventList'
-import Button from '@/components/Button'
 import useProjects from '@/hooks/useProjects'
-import { baseColor, computeSize, size, weight } from '@/styles/variables'
 import { PlusIcon } from '@/components/Icon'
+import {
+  Input,
+  InputGroup,
+  InputRightElement,
+  SimpleGrid,
+  VStack,
+  Button
+} from '@chakra-ui/react'
 import Card from './Card'
-
-const StyledAllLists = styled.section`
-  min-height: 80vh;
-  height: fit-content;
-  width: 100%;
-  padding-bottom: ${computeSize(84)};
-  display: grid;
-  gap: 24px;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: flex-start;
-
-  @media screen and (max-width: 960px) {
-    padding: 0;
-    align-items: flex-start;
-  }
-`
-
-const CardWrapper = styled.div`
-  padding: ${computeSize(70)} 0 ${computeSize(75)};
-  display: grid;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  max-width: ${computeSize(600)};
-  min-width: ${computeSize(600)};
-  grid-gap: ${computeSize(30)};
-  grid-template-columns: 1fr 1fr 1fr;
-
-  @media screen and (max-width: 960px) {
-    grid-template-columns: 1fr 1fr;
-  }
-
-  @media screen and (max-width: 414px) {
-    display: flex;
-    flex-wrap: wrap;
-    max-width: initial;
-    min-width: initial;
-    grid-template-columns: 1fr;
-  }
-`
-
-const AddList = styled.div`
-  border-bottom: 0.5px solid ${baseColor.gray};
-  display: inline-flex;
-  padding: 8px;
-`
-const ListAddress = styled.input`
-  border: none;
-  -webkit-tap-highlight-color: transparent;
-  outline: none;
-  display: block;
-  flex: 1;
-  font-size: ${size.sm};
-  background-color: transparent;
-  font-weight: ${weight.semiBold};
-
-  ::placeholder {
-    color: ${baseColor.secondary};
-  }
-`
-
-const Plus = styled(PlusIcon)`
-  width: ${size.tn};
-`
 
 function CardList() {
   const [url, setUrl] = useState('')
@@ -90,8 +31,8 @@ function CardList() {
             id={k}
             item={{
               projectDetail: {
-                ...projects[k],
-                ...projectDetail
+                ...projectDetail,
+                ...projects[k]
               },
               loading,
               error
@@ -112,20 +53,38 @@ function CardList() {
   }
 
   return (
-    <StyledAllLists>
-      <CardWrapper>{getRender()}</CardWrapper>
-      <AddList>
-        <ListAddress
+    <VStack
+      spacing="6"
+      minH="80vh"
+      height="fit-content"
+      w="full"
+      pb={{ base: 0, lg: '20' }}
+      align={{ base: 'center', lg: 'flex-start' }}
+    >
+      <SimpleGrid
+        columns={{ base: 1, sm: 2, lg: 3 }}
+        spacing="7.5"
+        maxW={{ base: 'initial', lg: '37.5rem' }}
+        minW={{ base: 'initial', lg: '37.5rem' }}
+        py="25"
+      >
+        {getRender()}
+      </SimpleGrid>
+
+      <InputGroup>
+        <Input
+          pr="4.5rem"
           placeholder="Address"
-          type="text"
           onChange={e => setUrl(e.target.value)}
           value={url}
         />
-        <Button onClick={addProjectsHandler}>
-          <Plus /> add a list
-        </Button>
-      </AddList>
-    </StyledAllLists>
+        <InputRightElement w="fit-content">
+          <Button h="full" leftIcon={<PlusIcon />} onClick={addProjectsHandler}>
+            add a list
+          </Button>
+        </InputRightElement>
+      </InputGroup>
+    </VStack>
   )
 }
 

@@ -1,29 +1,20 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import styled from 'styled-components'
 import useFetchEventList from '@/hooks/useFetchEventList'
 import { useLocation } from 'react-router-dom'
+import { SimpleGrid } from '@chakra-ui/react'
+import theme from '@/theme'
 import ProjectDescription from './ProjectDescription'
 import EventResults from './EventResults'
 
-const StyledList = styled.main`
-  display: grid;
-  grid-template-columns: 300px 800px;
-  grid-gap: 3rem;
-  position: relative;
-  box-sizing: border-box;
-
-  @media screen and (max-width: 960px) {
-    grid-template-columns: 1fr;
-    width: 100%;
-    grid-gap: 1.5rem;
-    padding: 0 1.5rem;
-  }
-`
-
 function ProjectDetail() {
   const location = useLocation()
-  const [projectsID, setProjectsID] = useState<string[]>([])
+  const [projectID, setProjectID] = useState<string>('')
+  const projectsID = useMemo(() => [projectID], [projectID])
   const res = useFetchEventList(projectsID, true)
+
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [])
 
   useEffect(() => {
     const search = location.search
@@ -36,12 +27,12 @@ function ProjectDetail() {
           [k]: v
         }
       }, {})
-    setProjectsID([search.url])
+    setProjectID(search.url)
   }, [location])
 
   const { description, chainID, result } = useMemo(() => {
-    if (projectsID.length > 0) {
-      const { projectDetail: list } = res[projectsID[0]]
+    if (projectID) {
+      const { projectDetail: list } = res[projectID]
       const { events } = list || {}
 
       return {
@@ -51,17 +42,25 @@ function ProjectDetail() {
       }
     }
     return {}
-  }, [res, projectsID])
+  }, [res, projectID])
 
   return (
-    <StyledList>
+    <SimpleGrid
+      minW={{ base: 'full', lg: 'initial' }}
+      templateColumns={{
+        base: '1fr',
+        lg: `${theme.sizes['60']} ${theme.sizes['4xl']}`
+      }}
+      spacing={{ base: '6', lg: '10' }}
+      px={{ base: '6', lg: 'initial' }}
+    >
       <ProjectDescription
-        id={projectsID[0]}
+        id={projectID}
         description={description}
         chainID={chainID}
       />
       <EventResults list={result} chainID={chainID} />
-    </StyledList>
+    </SimpleGrid>
   )
 }
 

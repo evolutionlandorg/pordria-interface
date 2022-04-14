@@ -1,87 +1,57 @@
 import React, { FC, useMemo } from 'react'
-import styled, { css } from 'styled-components'
 import { IProjectDetail } from '@/hooks/useFetchEventList'
 import useProjects from '@/hooks/useProjects'
 import networkMap from '@/config/network'
-import Img from '@/components/Image'
 import {
-  baseColor,
-  color,
-  computeSize,
-  gradient,
-  radius,
-  size
-} from '@/styles/variables'
+  chakra,
+  CSSObject,
+  Flex,
+  Heading,
+  Link,
+  SimpleGrid,
+  Text
+} from '@chakra-ui/react'
+import ImgWithFb from '@/components/ImgWithFb'
 
-const StyledInfo = styled.section`
-  display: grid;
-  grid-template-rows: 1fr;
-  max-width: 960px;
-  box-sizing: border-box;
-  padding: 3rem 0;
-  min-height: 400px;
-  position: sticky;
-  top: 3rem;
-  height: 400px;
+const ProjectDescriptionSX: CSSObject = {
+  py: { base: '0', lg: '10' },
+  minH: { base: 'initial', lg: 'sm' },
+  h: { base: 'fit-content', lg: 'sm' },
+  alignItems: { base: 'flex-start', lg: 'initial' },
+  pos: { base: 'relative', lg: 'sticky' },
+  maxW: { base: '80', sm: 'full' },
+  top: { base: 'initial', lg: '10' },
+  mt: { base: '12', lg: '0' },
+  width: { base: 'full', sm: 'initial' },
+  overflow: { base: 'hidden', sm: 'initial' }
+}
 
-  @media screen and (max-width: 960px) {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-gap: ${computeSize(20)};
-    position: relative;
-    align-items: flex-start;
-    min-height: initial;
-    top: initial;
-    margin-top: ${computeSize(50)};
-    height: fit-content;
-    padding: 0;
+const logoCardSX: CSSObject = {
+  w: 'fit-content',
+  p: '3.375rem',
+  bgClip: 'padding-box, border-box',
+  backgroundOrigin: 'padding-box, border-box',
+  border: '1px solid',
+  borderColor: 'transparent',
+  boxShadow: 'card',
+  borderTopRadius: '6.25rem',
+  borderBottomRadius: 'xl'
+}
+
+const Title = chakra(Heading, {
+  baseStyle: {
+    ':not(:first-of-type)': {
+      mt: '5'
+    }
   }
+})
 
-  @media screen and (max-width: 414px) {
-    grid-template-columns: max-content;
-    width: 100%;
-    max-width: ${computeSize(320)};
-    overflow: hidden;
+const Content = chakra(Text, {
+  baseStyle: {
+    fontSize: 'sm',
+    mt: '2.5'
   }
-`
-
-const descriptionCSS = css`
-  font-size: ${size.sm};
-  max-width: ${computeSize(260)};
-`
-
-const Description = styled.h4`
-  ${descriptionCSS}
-  font-size: ${size.md};
-  margin-top: ${computeSize(20)};
-`
-
-const DesContent = styled.span`
-  ${descriptionCSS}
-  color: ${baseColor.darkBlack};
-  display: inline-block;
-  margin-top: ${computeSize(10)};
-`
-
-const Link = styled.a`
-  ${descriptionCSS}
-  color: ${baseColor.blue};
-  line-height: 1;
-`
-
-const LogoContainer = styled.div`
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  padding: ${computeSize(30)};
-  width: fit-content;
-  border: 1px solid transparent;
-  background-clip: padding-box, border-box;
-  background-origin: padding-box, border-box;
-  background-image: ${gradient.card};
-  box-shadow: 0px 4px 4px ${color.cardShadow};
-  border-radius: ${radius.lg};
-`
+})
 
 interface IProjectDescriptionProps {
   id: string
@@ -104,23 +74,34 @@ const ProjectDescription: FC<IProjectDescriptionProps> = ({
   }, [chainID])
   const { homepage, name: projectName } = projects[id] || {}
   const { logoURI, name = id && projectName } = description || {}
+
   return (
-    <StyledInfo>
-      <LogoContainer>
-        <Img src={logoURI} alt={name} width={computeSize(100)} />
-      </LogoContainer>
+    <SimpleGrid
+      sx={ProjectDescriptionSX}
+      as="section"
+      columns={{ base: 1, sm: 2, lg: 1 }}
+      spacing="7"
+    >
+      <Flex
+        justify="center"
+        align="center"
+        sx={logoCardSX}
+        bgGradient="linear(to-tr, white, white), linear-gradient(180deg, gradient.cardStart, gradient.cardEnd)"
+      >
+        <ImgWithFb src={logoURI} alt={name} w="16" />
+      </Flex>
       <div>
-        <Description>{name}</Description>
-        <Description>Network:</Description>
-        <DesContent>{chainName}</DesContent>
-        <Description>Website:</Description>
-        <DesContent>
-          <Link target="_blank" href={homepage} rel="noreferrer">
+        <Title size="sm">{name}</Title>
+        <Title size="sm">Network:</Title>
+        <Content>{chainName}</Content>
+        <Title size="sm">Website:</Title>
+        <Content>
+          <Link color="blue.500" target="_blank" href={homepage}>
             {homepage}
           </Link>
-        </DesContent>
+        </Content>
       </div>
-    </StyledInfo>
+    </SimpleGrid>
   )
 }
 

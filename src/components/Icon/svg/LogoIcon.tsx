@@ -1,0 +1,45 @@
+import React from 'react'
+import { createIcon } from '@chakra-ui/icons'
+
+const LogoIcon = createIcon({
+  displayName: 'LogoIcon',
+  viewBox: '0 0 25 25',
+  path: (
+    <>
+      <path
+        d="M18.834 22.438a1.478 1.478 0 0 1-1.157-.56c-.428-.462-3.738-3.72-5.766-5.706a1.48 1.48 0 0 1 1.583-2.438c.18.074.345.182.483.32.015.014 1.475 1.445 2.925 2.874l.454.448V10.42c0-2.705-2.178-4.906-4.856-4.906s-4.856 2.2-4.856 4.906v10.537a1.482 1.482 0 0 1-1.478 1.481 1.477 1.477 0 0 1-1.479-1.48V10.42c0-4.339 3.505-7.868 7.813-7.868s7.813 3.53 7.813 7.868v10.537a1.484 1.484 0 0 1-1.479 1.481Z"
+        fill="url(#a)"
+      />
+      <path
+        d="M12.5 11.843a1.69 1.69 0 0 0 1.69-1.692 1.69 1.69 0 0 0-1.69-1.693 1.69 1.69 0 0 0-1.689 1.693 1.69 1.69 0 0 0 1.69 1.692Z"
+        fill="url(#b)"
+      />
+      <defs>
+        <linearGradient
+          id="a"
+          x1="12.5"
+          y1="22.677"
+          x2="12.5"
+          y2="2.612"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop stopColor="#E000F4" />
+          <stop offset="1" stopColor="#12ECEC" />
+        </linearGradient>
+        <linearGradient
+          id="b"
+          x1="12.5"
+          y1="22.672"
+          x2="12.5"
+          y2="2.609"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop stopColor="#D200F4" />
+          <stop offset="1" stopColor="#12ECDF" />
+        </linearGradient>
+      </defs>
+    </>
+  )
+})
+
+export default LogoIcon

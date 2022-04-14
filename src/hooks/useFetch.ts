@@ -1,9 +1,13 @@
 import { useCallback, useState } from 'react'
-import toast from 'react-hot-toast'
+import useToast from '@/hooks/useToast'
 
 interface IFetchErrorConstructor {
   code: number
   message: string
+}
+
+interface FetchInit extends RequestInit {
+  catchError?: (e: Error) => void
 }
 
 class FetchError extends Error {
@@ -17,11 +21,14 @@ class FetchError extends Error {
 }
 
 const useFetch = () => {
-  const [isLoading, setStatus] = useState(true)
+  const [isLoading, setIsLoading] = useState(true)
+  const [isError, setIsError] = useState(false)
+  const toast = useToast()
 
   const fetchData = useCallback(
-    async <T>(url: RequestInfo, init?: RequestInit): Promise<T | undefined> => {
-      setStatus(true)
+    async <T>(url: RequestInfo, init?: FetchInit): Promise<T | undefined> => {
+      setIsLoading(true)
+      setIsError(false)
       let res
       try {
         const response = await fetch(url, init)
@@ -36,17 +43,26 @@ const useFetch = () => {
       } catch (e) {
         // TODO: add fetch error statusText
         if (e instanceof Error) {
-          toast.error(e.message || 'Error')
+          const catchError = init?.catchError
+          if (catchError) {
+            catchError(e)
+          } else {
+            toast({
+              status: 'error',
+              title: e.message || 'Error'
+            })
+          }
         }
+        setIsError(true)
       }
 
-      setStatus(false)
+      setIsLoading(false)
       return res
     },
-    []
+    [toast]
   )
 
-  return { isLoading, fetchData }
+  return { isLoading, isError, fetchData }
 }
 
 export default useFetch

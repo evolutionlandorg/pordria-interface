@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import useFetch from '@/hooks/useFetch'
 import DefaultProjects from '@/config/projects.json'
 
-interface IProjects {
+interface Projects {
   [key: string]: {
     name: string
     homepage: string
@@ -15,7 +15,7 @@ export default function useProjects() {
   const [projectIDPartialList, setProjectIDPartialList] = useState<
     Array<string>
   >([])
-  const [projects, setProjects] = useState<IProjects>({})
+  const [projects, setProjects] = useState<Projects>({})
 
   useEffect(() => {
     const initProjects = () => {
@@ -39,7 +39,7 @@ export default function useProjects() {
   }, [fetchData])
 
   const addProjects = async (url: string) => {
-    const newProjects = await fetchData<IProjects>(url)
+    const newProjects = await fetchData<Projects>(url)
 
     if (!newProjects) {
       return

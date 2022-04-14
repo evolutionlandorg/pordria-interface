@@ -8,13 +8,11 @@ import { PROJECT_DETAIL, INDEX, NO_MATCH } from '@/config/routers'
 import reportWebVitals from '@/reportWebVitals'
 import Loading from '@/components/Loading'
 import Provider from '@/Provider'
-import GlobalStyle from '@/styles'
 
 const ProjectDetail = React.lazy(() => import('@/pages/ProjectDetail'))
 
 ReactDOM.render(
   <StrictMode>
-    <GlobalStyle />
     <Provider>
       <BrowserRouter>
         <Routes>
