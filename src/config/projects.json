@@ -1,6 +1,10 @@
 {
   "https://raw.githubusercontent.com/evolutionlandorg/claims/main/data/pordria/project.json": {
-    "name": "Evolution Land",
+    "name": "Evolution Land Columbus",
+    "homepage": "https://www.evolution.land/"
+  },
+  "https://raw.githubusercontent.com/evolutionlandorg/claims/main/data/pordria/eden-events.json": {
+    "name": "Evolution Land Eden",
     "homepage": "https://www.evolution.land/"
   }
 }
