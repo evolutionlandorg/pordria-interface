@@ -6,5 +6,9 @@
   "https://raw.githubusercontent.com/evolutionlandorg/claims/main/data/pordria/eden-events.json": {
     "name": "Evolution Land Eden",
     "homepage": "https://www.evolution.land/"
+  },
+  "https://raw.githubusercontent.com/darwinia-network/darwinia-messages-sol/master/contracts/claims/data/crab/data/nft_event.json": {
+    "name": "Darwinia NFT",
+    "homepage": "https://darwinia.network/"
   }
 }
