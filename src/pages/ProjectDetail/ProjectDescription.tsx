@@ -88,7 +88,7 @@ const ProjectDescription: FC<IProjectDescriptionProps> = ({
         sx={logoCardSX}
         bgGradient="linear(to-tr, white, white), linear-gradient(180deg, gradient.cardStart, gradient.cardEnd)"
       >
-        <ImgWithFb src={logoURI} alt={name} w="16" />
+        <ImgWithFb src={logoURI} alt={name} w="16" borderRadius="100%" />
       </Flex>
       <div>
         <Title size="sm">{name}</Title>
