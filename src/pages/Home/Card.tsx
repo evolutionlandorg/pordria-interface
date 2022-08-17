@@ -38,7 +38,14 @@ const Card: FC<CardProps> = ({ to, item, id }) => {
       borderBottomRadius="xl"
       bgGradient="linear(to-tr, white, white), linear-gradient(180deg, gradient.cardStart, gradient.cardEnd)"
     >
-      <ImgWithFb boxSize="16" mx="auto" src={logoURI} alt={name} mt="4" />
+      <ImgWithFb
+        boxSize="16"
+        mx="auto"
+        src={logoURI}
+        alt={name}
+        mt="4"
+        borderRadius="100%"
+      />
       <Heading size="sm" mt="3" mb="1" overflowWrap="break-word">
         {name}
       </Heading>
