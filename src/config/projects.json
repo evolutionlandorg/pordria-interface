@@ -10,5 +10,9 @@
   "https://raw.githubusercontent.com/darwinia-network/darwinia-messages-sol/master/contracts/claims/data/crab/data/nft_events.json": {
     "name": "Darwinia NFT",
     "homepage": "https://darwinia.network/"
+  },
+  "https://raw.githubusercontent.com/evolutionlandorg/arena/main/data/polygon/pordria/events.json": {
+    "name": "Apostle Arena",
+    "homepage": "https://arena.evolution.land/"
   }
 }
