@@ -14,5 +14,9 @@
   "https://raw.githubusercontent.com/evolutionlandorg/arena/main/data/polygon/pordria/events.json": {
     "name": "Apostle Arena",
     "homepage": "https://arena.evolution.land/"
+  },
+  "https://raw.githubusercontent.com/darwinia-network/darwinia-messages-sol/master/contracts/claims/data/ethlive/pordria/events.json": {
+    "name": "Helix Bridge",
+    "homepage": "https://helixbridge.app/"
   }
 }
